@@ -4,7 +4,7 @@ import {
   LayoutDashboard, CheckSquare, Calendar, Heart, Wallet,
   BookOpen, Target, Clock, Settings, GraduationCap, Sparkles,
   Menu, Sun, Moon, Globe, ChevronLeft, ChevronRight,
-  Layers, MessageSquare, PenLine, Timer, Bell,
+  Layers, MessageSquare, PenLine, Timer, Bell, Brain,
 } from 'lucide-react';
 import { ThemeProvider, useTheme } from '@/contexts/ThemeContext';
 import { LanguageProvider, useLanguage } from '@/contexts/LanguageContext';
@@ -30,13 +30,14 @@ import PromptLibrary from '@/sections/PromptLibrary';
 import Journal from '@/sections/Journal';
 import TimeBlocking from '@/sections/TimeBlocking';
 import NotificationsManager from '@/sections/NotificationsManager';
+import Psychology from '@/sections/Psychology';
 import './App.css';
 
 type ViewType =
   | 'dashboard' | 'tasks' | 'calendar' | 'health' | 'money'
   | 'learning' | 'habits' | 'goals' | 'pomodoro' | 'meditation'
   | 'planning' | 'prompts' | 'journal' | 'timeblocking' | 'notifications'
-  | 'settings';
+  | 'psychology' | 'settings';
 
 interface NavItemDef { id: ViewType; icon: React.ElementType; group?: string; }
 
@@ -65,6 +66,7 @@ const navGroups: { label: string; items: NavItemDef[] }[] = [
       { id: 'pomodoro',      icon: Clock },
       { id: 'meditation',    icon: BookOpen },
       { id: 'journal',       icon: PenLine },
+      { id: 'psychology',    icon: Brain },
     ],
   },
   {
@@ -101,6 +103,7 @@ function renderView(view: ViewType) {
     case 'journal':      return <Journal />;
     case 'timeblocking': return <TimeBlocking />;
     case 'notifications':return <NotificationsManager />;
+    case 'psychology':   return <Psychology />;
     case 'settings':     return <SettingsView />;
     default:             return <Dashboard />;
   }

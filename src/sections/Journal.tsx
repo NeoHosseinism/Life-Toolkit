@@ -42,6 +42,16 @@ function saveEntries(entries: JournalEntry[]) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
 }
 
+const GRATITUDE_PLACEHOLDERS = [
+  "I'm grateful for…",
+  "Something good that happened…",
+  "A person I appreciate…"
+];
+
+function getGratitudePlaceholder(index: number): string {
+  return GRATITUDE_PLACEHOLDERS[index] || "";
+}
+
 function loadSettings(): JSettings {
   try {
     return { ...DEFAULT_SETTINGS, ...JSON.parse(localStorage.getItem(SETTINGS_KEY) ?? '{}') };
@@ -518,7 +528,7 @@ export default function Journal() {
                   <input
                     value={g}
                     onChange={(e) => setGratitudeItem(i, e.target.value)}
-                    placeholder={['I'm grateful for…', 'Something good that happened…', 'A person I appreciate…'][i]}
+                    placeholder={getGratitudePlaceholder(i)}
                     className="flex-1 px-3 py-2 rounded-xl border border-border bg-card text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
                   />
                 </div>
