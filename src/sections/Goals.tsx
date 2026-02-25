@@ -6,7 +6,7 @@ import {
   CheckCircle2,
   Circle,
   X,
-  Calendar,
+  Calendar as CalendarIcon,
   MoreHorizontal,
 } from 'lucide-react';
 import { useApp } from '@/contexts/AppContext';
@@ -16,6 +16,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
+import { Calendar } from '@/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import {
   Dialog,
   DialogContent,
@@ -147,11 +149,22 @@ export default function Goals() {
               </div>
               <div className="space-y-2">
                 <Label>{t('deadline')} ({t('optional')})</Label>
-                <Input
-                  type="date"
-                  value={goalDeadline}
-                  onChange={(e) => setGoalDeadline(e.target.value)}
-                />
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button variant="outline" className="w-full justify-start font-normal">
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {goalDeadline ? goalDeadline : t('deadline')}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={goalDeadline ? new Date(goalDeadline) : undefined}
+                      onSelect={(d) => setGoalDeadline(d ? d.toISOString().split('T')[0] : '')}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
               </div>
               <div className="space-y-2">
                 <Label>{t('milestones')}</Label>

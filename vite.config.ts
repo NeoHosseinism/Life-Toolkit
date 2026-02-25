@@ -61,18 +61,12 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
-          'vendor-react': ['react', 'react-dom'],
-          'vendor-motion': ['framer-motion'],
-          'vendor-charts': ['recharts'],
-          'vendor-radix': [
-            '@radix-ui/react-dialog',
-            '@radix-ui/react-dropdown-menu',
-            '@radix-ui/react-select',
-            '@radix-ui/react-tabs',
-            '@radix-ui/react-tooltip',
-            '@radix-ui/react-popover',
-          ],
+        manualChunks(id) {
+          if (id.includes('/sections/Psychology')) return 'psychology';
+          if (id.includes('react-dom') || id.includes('react/')) return 'vendor-react';
+          if (id.includes('framer-motion')) return 'vendor-motion';
+          if (id.includes('recharts')) return 'vendor-charts';
+          if (id.includes('@radix-ui/')) return 'vendor-radix';
         },
       },
     },

@@ -1,11 +1,13 @@
 import React, { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Plus, Trash2, Edit2, Cake, Gift, Calendar } from 'lucide-react';
+import { Plus, Trash2, Edit2, Cake, Gift, Calendar as CalendarIcon } from 'lucide-react';
 import { useApp } from '@/contexts/AppContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Calendar } from '@/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
@@ -280,11 +282,22 @@ export default function Birthdays() {
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1">
                 <Label className="text-xs">{isRTL ? 'تاریخ *' : 'Date *'}</Label>
-                <Input
-                  className="h-8 text-sm" type="date"
-                  value={form.date}
-                  onChange={e => setForm(f => ({ ...f, date: e.target.value, hasYear: true }))}
-                />
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button variant="outline" className="h-8 w-full justify-start text-sm font-normal">
+                      <CalendarIcon className="mr-1 h-3 w-3" />
+                      {form.date ? form.date : (isRTL ? 'انتخاب تاریخ' : 'Pick date')}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={form.date ? new Date(form.date) : undefined}
+                      onSelect={(d) => setForm(f => ({ ...f, date: d ? d.toISOString().split('T')[0] : '', hasYear: true }))}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
               </div>
               <div className="space-y-1">
                 <Label className="text-xs">{isRTL ? 'رابطه' : 'Relation'}</Label>

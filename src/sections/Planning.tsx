@@ -317,8 +317,8 @@ function EisenhowerMatrix() {
 
   const quadrants: { id: EItem['quadrant']; label: string; sub: string; color: string; border: string }[] = [
     { id: 'doFirst',    label: 'Do First',  sub: 'Urgent + Important',    color: 'bg-red-500/10',    border: 'border-red-500/30' },
-    { id: 'schedule',   label: 'Schedule',  sub: 'Not Urgent + Important', color: 'bg-blue-500/10',   border: 'border-blue-500/30' },
-    { id: 'delegate',   label: 'Delegate',  sub: 'Urgent + Not Important', color: 'bg-yellow-500/10', border: 'border-yellow-500/30' },
+    { id: 'schedule',   label: 'Schedule',  sub: 'Not Urgent + Important', color: 'bg-green-500/10',  border: 'border-green-500/30' },
+    { id: 'delegate',   label: 'Delegate',  sub: 'Urgent + Not Important', color: 'bg-orange-500/10', border: 'border-orange-500/30' },
     { id: 'eliminate',  label: 'Eliminate', sub: 'Neither',               color: 'bg-gray-500/10',   border: 'border-gray-500/30' },
   ];
 

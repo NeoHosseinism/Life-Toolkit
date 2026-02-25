@@ -111,7 +111,7 @@ function ActivityHeatmap({ data }: { data: { date: string; count: number }[] }) 
               <div
                 key={di}
                 title={`${cell.date}: ${toPersianNum(cell.count)}`}
-                className="w-3 h-3 rounded-sm cursor-default transition-opacity hover:opacity-80"
+                className="w-3.5 h-3.5 rounded-sm cursor-default transition-opacity hover:opacity-80"
                 style={{ backgroundColor: getColor(cell.count) }}
               />
             ))}
@@ -121,7 +121,7 @@ function ActivityHeatmap({ data }: { data: { date: string; count: number }[] }) 
       <div className="flex items-center gap-1 mt-2 text-xs text-muted-foreground">
         <span>{isRTL ? 'کمتر' : 'Less'}</span>
         {[0, 0.25, 0.5, 0.75, 1].map(v => (
-          <div key={v} className="w-3 h-3 rounded-sm" style={{ backgroundColor: getColor(v * maxCount) }} />
+          <div key={v} className="w-3.5 h-3.5 rounded-sm" style={{ backgroundColor: getColor(v * maxCount) }} />
         ))}
         <span>{isRTL ? 'بیشتر' : 'More'}</span>
       </div>
@@ -138,7 +138,7 @@ function DailyScoreGauge({ score }: { score: number }) {
 
   return (
     <div className="flex flex-col items-center justify-center">
-      <div className="relative w-36 h-36">
+      <div className="relative w-48 h-48">
         <ResponsiveContainer width="100%" height="100%">
           <RadialBarChart
             cx="50%" cy="50%"
@@ -310,7 +310,7 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Today's Tasks */}
         <motion.div variants={itemVariants} className="lg:col-span-2">
-          <Card className="h-full">
+          <Card className="h-full min-h-[200px]">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-base font-semibold flex items-center gap-2">
                 <Calendar className="w-4 h-4 text-primary" /> {t('today')}
@@ -343,7 +343,7 @@ export default function Dashboard() {
 
         {/* Daily Score Gauge */}
         <motion.div variants={itemVariants}>
-          <Card className="h-full flex flex-col">
+          <Card className="h-full flex flex-col min-h-[200px]">
             <CardHeader className="pb-2">
               <CardTitle className="text-base font-semibold flex items-center gap-2">
                 <Target className="w-4 h-4 text-primary" /> {isRTL ? 'امتیاز امروز' : 'Daily Score'}
@@ -383,12 +383,12 @@ export default function Dashboard() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="h-56">
+              <div className="h-72">
                 <ResponsiveContainer width="100%" height="100%">
                   <RadarChart data={lifeBalanceData}>
                     <PolarGrid stroke="hsl(var(--border))" />
                     <PolarAngleAxis dataKey="subject" tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }} />
-                    <PolarRadiusAxis angle={30} domain={[0, 100]} tick={{ fontSize: 9 }} tickCount={4} />
+                    <PolarRadiusAxis angle={30} domain={[0, 100]} tick={{ fontSize: 9 }} tickCount={4} tickFormatter={(v) => toPersianNum(v)} />
                     <Radar name="Score" dataKey="A" stroke="hsl(var(--primary))" fill="hsl(var(--primary))" fillOpacity={0.25} strokeWidth={2} />
                     <Tooltip contentStyle={tooltipStyle} formatter={(v: number) => [`${toPersianNum(v)}%`, '']} />
                   </RadarChart>
@@ -416,7 +416,7 @@ export default function Dashboard() {
                 <div className="h-56">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={habitStreakData} layout="vertical" margin={{ left: 0, right: 16 }}>
-                      <XAxis type="number" tick={{ fontSize: 11 }} stroke="hsl(var(--muted-foreground))" />
+                      <XAxis type="number" tick={{ fontSize: 11 }} stroke="hsl(var(--muted-foreground))" tickFormatter={(v) => toPersianNum(v)} />
                       <YAxis type="category" dataKey="name" width={72} tick={{ fontSize: 11 }} stroke="hsl(var(--muted-foreground))" />
                       <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" horizontal={false} />
                       <Tooltip contentStyle={tooltipStyle} formatter={(v: number) => [toPersianNum(v), isRTL ? 'روز' : 'days']} />
@@ -454,7 +454,7 @@ export default function Dashboard() {
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                     <XAxis dataKey="name" tick={{ fontSize: 10 }} stroke="hsl(var(--muted-foreground))" interval={4} />
-                    <YAxis tick={{ fontSize: 10 }} stroke="hsl(var(--muted-foreground))" />
+                    <YAxis tick={{ fontSize: 10 }} stroke="hsl(var(--muted-foreground))" tickFormatter={(v) => toPersianNum(v)} />
                     <Tooltip contentStyle={tooltipStyle} formatter={(v: number) => [toPersianNum(v), isRTL ? 'عادت' : 'habits']} />
                     <Area type="monotone" dataKey="completions" stroke="#f59e0b" strokeWidth={2} fill="url(#habitGrad)" dot={false} />
                   </AreaChart>
@@ -525,7 +525,7 @@ export default function Dashboard() {
                   <BarChart data={taskChartData}>
                     <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                     <XAxis dataKey="name" tick={{ fontSize: 11 }} stroke="hsl(var(--muted-foreground))" />
-                    <YAxis tick={{ fontSize: 11 }} stroke="hsl(var(--muted-foreground))" allowDecimals={false} />
+                    <YAxis tick={{ fontSize: 11 }} stroke="hsl(var(--muted-foreground))" allowDecimals={false} tickFormatter={(v) => toPersianNum(v)} />
                     <Tooltip contentStyle={tooltipStyle} />
                     <Bar dataKey="completed" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
                   </BarChart>
@@ -546,7 +546,7 @@ export default function Dashboard() {
                   <LineChart data={focusTimeData}>
                     <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                     <XAxis dataKey="name" tick={{ fontSize: 11 }} stroke="hsl(var(--muted-foreground))" />
-                    <YAxis tick={{ fontSize: 11 }} stroke="hsl(var(--muted-foreground))" />
+                    <YAxis tick={{ fontSize: 11 }} stroke="hsl(var(--muted-foreground))" tickFormatter={(v) => toPersianNum(v)} />
                     <Tooltip contentStyle={tooltipStyle} />
                     <Line type="monotone" dataKey="minutes" stroke="#22c55e" strokeWidth={2} dot={{ fill: '#22c55e', strokeWidth: 2, r: 3 }} />
                   </LineChart>
@@ -566,7 +566,7 @@ export default function Dashboard() {
               {isRTL ? 'نقشه فعالیت' : 'Activity Map'}
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="min-h-[100px]">
             <ActivityHeatmap data={heatmapData} />
           </CardContent>
         </Card>

@@ -13,6 +13,10 @@ import {
   AlertTriangle,
   X,
   Type,
+  Bot,
+  ExternalLink,
+  Eye,
+  EyeOff,
 } from 'lucide-react';
 import { useApp } from '@/contexts/AppContext';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -55,6 +59,7 @@ export default function SettingsView() {
   const [importJson, setImportJson] = useState('');
   const [isResetDialogOpen, setIsResetDialogOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('general');
+  const [showApiKey, setShowApiKey] = useState(false);
 
   // Apply font class to body whenever fontSettings change
   useEffect(() => {
@@ -97,22 +102,26 @@ export default function SettingsView() {
   return (
     <div className="space-y-6">
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4">
+        <TabsList className="grid w-full grid-cols-3 sm:grid-cols-5">
           <TabsTrigger value="general" className="flex items-center gap-2">
             <Settings className="w-4 h-4" />
-            <span>{t('general')}</span>
+            <span className="hidden sm:inline">{t('general')}</span>
           </TabsTrigger>
           <TabsTrigger value="appearance" className="flex items-center gap-2">
             <Moon className="w-4 h-4" />
-            <span>{t('appearance')}</span>
+            <span className="hidden sm:inline">{t('appearance')}</span>
           </TabsTrigger>
           <TabsTrigger value="notifications" className="flex items-center gap-2">
             <Bell className="w-4 h-4" />
-            <span>{t('notifications')}</span>
+            <span className="hidden sm:inline">{t('notifications')}</span>
+          </TabsTrigger>
+          <TabsTrigger value="ai" className="flex items-center gap-2">
+            <Bot className="w-4 h-4" />
+            <span className="hidden sm:inline">{t('aiSettings')}</span>
           </TabsTrigger>
           <TabsTrigger value="data" className="flex items-center gap-2">
             <Download className="w-4 h-4" />
-            <span>{t('data')}</span>
+            <span className="hidden sm:inline">{t('data')}</span>
           </TabsTrigger>
         </TabsList>
 
@@ -338,6 +347,71 @@ export default function SettingsView() {
                   </div>
                 </>
               )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="ai" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base flex items-center gap-2">
+                <Bot className="w-4 h-4" />
+                {t('aiSettings')}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-sm text-muted-foreground">{t('apiKeyDescription')}</p>
+
+              <div className="space-y-2">
+                <Label className="text-base">{t('openRouterKey')}</Label>
+                <div className="relative">
+                  <input
+                    type={showApiKey ? 'text' : 'password'}
+                    value={settings.openRouterKey ?? ''}
+                    onChange={(e) => updateSettings({ openRouterKey: e.target.value })}
+                    placeholder="sk-or-..."
+                    className={`w-full h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ${isRTL ? 'pr-3 pl-10' : 'pl-3 pr-10'}`}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowApiKey(v => !v)}
+                    className={`absolute ${isRTL ? 'left-3' : 'right-3'} top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground`}
+                  >
+                    {showApiKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-base">{t('aiModel')}</Label>
+                <Select
+                  value={settings.aiModel ?? 'google/gemini-flash-1.5'}
+                  onValueChange={(v) => updateSettings({ aiModel: v })}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="google/gemini-flash-1.5">Gemini Flash 1.5</SelectItem>
+                    <SelectItem value="google/gemini-pro-1.5">Gemini Pro 1.5</SelectItem>
+                    <SelectItem value="anthropic/claude-haiku">Claude Haiku</SelectItem>
+                    <SelectItem value="anthropic/claude-sonnet">Claude Sonnet</SelectItem>
+                    <SelectItem value="openai/gpt-4o-mini">GPT-4o Mini</SelectItem>
+                    <SelectItem value="openai/gpt-4o">GPT-4o</SelectItem>
+                    <SelectItem value="meta-llama/llama-3.1-8b-instruct">Llama 3.1 8B</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <a
+                href="https://openrouter.ai/credits"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-sm text-primary hover:underline"
+              >
+                <ExternalLink className="w-3.5 h-3.5" />
+                {t('checkBalance')}
+              </a>
             </CardContent>
           </Card>
         </TabsContent>

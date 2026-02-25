@@ -214,6 +214,69 @@ const translations: Record<Language, Translations> = {
     englishFont: 'English Font',
     usePersianNumerals: 'Use Persian Numerals (۱۲۳)',
     appearance: 'Appearance',
+    // Settings tabs & descriptions
+    general: 'General',
+    region: 'Region',
+    selectLanguage: 'Select interface language',
+    selectCalendar: 'Select calendar system',
+    selectCurrency: 'Select currency',
+    selectTheme: 'Select color theme',
+    data: 'Data',
+    deleteDescription: 'This will permanently erase all your data. This cannot be undone.',
+    exportDescription: 'Download all your data as a JSON backup file.',
+    importDescription: 'Restore data from a previously exported JSON backup.',
+    pasteJsonHere: 'Paste JSON here…',
+    // Notifications
+    enableNotifications: 'Enable Notifications',
+    notificationsDescription: 'Receive reminders for tasks, habits and focus sessions',
+    taskReminders: 'Task Reminders',
+    habitReminders: 'Habit Reminders',
+    pomodoroComplete: 'Pomodoro Complete',
+    dailySummary: 'Daily Summary',
+    // Dashboard
+    recentActivity: 'Recent Activity',
+    focusTime: 'Focus Time',
+    sessions: 'Sessions',
+    // Goals / Tasks
+    goal: 'Goal',
+    milestone: 'Milestone',
+    optional: 'optional',
+    add: 'Add',
+    title: 'Title',
+    more: 'more',
+    // Calendar
+    month: 'Month',
+    list: 'List',
+    addEvent: 'Add Event',
+    event: 'Event',
+    // Nav
+    favorites: 'Favorites',
+    totalTime: 'Total Time',
+    // Task views
+    kanban: 'Kanban',
+    matrix: 'Matrix',
+    // Wellness
+    mindfulness: 'Mindfulness',
+    breathing: 'Breathing',
+    bodyScan: 'Body Scan',
+    lovingKindness: 'Loving Kindness',
+    // Command palette
+    searchCommands: 'Search commands…',
+    noResults: 'No results found.',
+    navigation: 'Navigation',
+    quickActions: 'Quick Actions',
+    toggleTheme: 'Toggle Theme',
+    switchLanguage: 'Switch Language',
+    writeJournal: 'Write Journal Entry',
+    startFocus: 'Start Focus Session',
+    openCommandPalette: 'to open',
+    // AI Settings
+    openRouterKey: 'OpenRouter API Key',
+    aiModel: 'AI Model',
+    aiSettings: 'AI Settings',
+    apiKeyDescription: 'Used for AI-powered journal analysis. Get your key at openrouter.ai',
+    checkBalance: 'Check Balance',
+    expenses: 'Expenses',
   },
   fa: {
     appName: 'جعبه‌ابزار زندگی',
@@ -417,6 +480,69 @@ const translations: Record<Language, Translations> = {
     englishFont: 'فونت انگلیسی',
     usePersianNumerals: 'استفاده از اعداد فارسی (۱۲۳)',
     appearance: 'ظاهر',
+    // Settings tabs & descriptions
+    general: 'عمومی',
+    region: 'منطقه',
+    selectLanguage: 'انتخاب زبان رابط',
+    selectCalendar: 'انتخاب نوع تقویم',
+    selectCurrency: 'انتخاب ارز',
+    selectTheme: 'انتخاب رنگ‌بندی',
+    data: 'داده',
+    deleteDescription: 'تمام داده‌های شما به‌طور دائمی پاک خواهد شد. این عمل قابل بازگشت نیست.',
+    exportDescription: 'همه داده‌های شما را به‌صورت فایل JSON دانلود کنید.',
+    importDescription: 'داده‌ها را از یک فایل پشتیبان JSON بازیابی کنید.',
+    pasteJsonHere: 'JSON را اینجا بچسبانید…',
+    // Notifications
+    enableNotifications: 'فعال‌سازی اعلان‌ها',
+    notificationsDescription: 'یادآوری‌هایی برای وظایف، عادات و جلسات تمرکز دریافت کنید',
+    taskReminders: 'یادآوری وظایف',
+    habitReminders: 'یادآوری عادات',
+    pomodoroComplete: 'پایان پومودورو',
+    dailySummary: 'خلاصه روزانه',
+    // Dashboard
+    recentActivity: 'فعالیت اخیر',
+    focusTime: 'زمان تمرکز',
+    sessions: 'جلسات',
+    // Goals / Tasks
+    goal: 'هدف',
+    milestone: 'نقطه عطف',
+    optional: 'اختیاری',
+    add: 'افزودن',
+    title: 'عنوان',
+    more: 'بیشتر',
+    // Calendar
+    month: 'ماه',
+    list: 'لیست',
+    addEvent: 'افزودن رویداد',
+    event: 'رویداد',
+    // Nav
+    favorites: 'موردعلاقه‌ها',
+    totalTime: 'زمان کل',
+    // Task views
+    kanban: 'کانبان',
+    matrix: 'ماتریس',
+    // Wellness
+    mindfulness: 'ذهن‌آگاهی',
+    breathing: 'تنفس',
+    bodyScan: 'اسکن بدن',
+    lovingKindness: 'مهربانی',
+    // Command palette
+    searchCommands: 'جستجوی دستورات…',
+    noResults: 'نتیجه‌ای یافت نشد.',
+    navigation: 'ناوبری',
+    quickActions: 'اقدامات سریع',
+    toggleTheme: 'تغییر تم',
+    switchLanguage: 'تغییر زبان',
+    writeJournal: 'نوشتن در دفتر خاطرات',
+    startFocus: 'شروع جلسه تمرکز',
+    openCommandPalette: 'برای باز کردن',
+    // AI Settings
+    openRouterKey: 'کلید API اوپن‌روتر',
+    aiModel: 'مدل هوش مصنوعی',
+    aiSettings: 'تنظیمات هوش مصنوعی',
+    apiKeyDescription: 'برای تحلیل هوشمند دفتر خاطرات استفاده می‌شود. کلید خود را از openrouter.ai دریافت کنید',
+    checkBalance: 'بررسی موجودی',
+    expenses: 'هزینه‌ها',
   },
 };
 
@@ -440,7 +566,7 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguageState] = useState<Language>('en');
-  const [calendar, setCalendarState] = useState<CalendarType>('gregorian');
+  const [calendar, setCalendarState] = useState<CalendarType>('jalali');
   const [currency, setCurrencyState] = useState<CurrencyType>('toman');
   const [usePersianNumerals, setUsePersianNumeralsState] = useState(false);
 
@@ -460,6 +586,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
+    document.body.dir = isRTL ? 'rtl' : 'ltr';
     document.documentElement.lang = language;
     if (isRTL) {
       document.body.classList.add('font-persian');
@@ -471,6 +598,14 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
     localStorage.setItem('language', lang);
+    // Auto-sync Persian numerals with language
+    if (lang === 'fa') {
+      setUsePersianNumeralsState(true);
+      localStorage.setItem('usePersianNumerals', 'true');
+    } else {
+      setUsePersianNumeralsState(false);
+      localStorage.setItem('usePersianNumerals', 'false');
+    }
   };
 
   const setCalendar = (cal: CalendarType) => {
@@ -505,7 +640,6 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
   const toPersianNum = useCallback((num: number | string): string => {
     if (!usePersianNumerals && language !== 'fa') return String(num);
-    if (language !== 'fa' && !usePersianNumerals) return String(num);
     return String(num).replace(/\d/g, (d) => persianNumerals[d] || d);
   }, [language, usePersianNumerals]);
 

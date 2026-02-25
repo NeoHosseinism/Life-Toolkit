@@ -3,7 +3,7 @@ import {
   LayoutDashboard, CheckSquare, Calendar, Heart, Wallet,
   BookOpen, Target, Clock, Settings, GraduationCap, Sparkles,
   Layers, MessageSquare, PenLine, Timer, Bell, Brain,
-  Sun, Moon, Globe, Search, Plus, X,
+  Sun, Moon, Globe, Search, Plus, X, HandCoins, Cake,
 } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -42,6 +42,8 @@ const navItems: { id: ViewType; icon: React.ElementType; group: string }[] = [
   { id: 'timeblocking', icon: Timer, group: 'Planning' },
   { id: 'goals', icon: Target, group: 'Planning' },
   { id: 'habits', icon: Sparkles, group: 'Planning' },
+  { id: 'debts', icon: HandCoins, group: 'Finance' },
+  { id: 'birthdays', icon: Cake, group: 'Finance' },
   { id: 'learning', icon: GraduationCap, group: 'Growth' },
   { id: 'money', icon: Wallet, group: 'Growth' },
   { id: 'prompts', icon: MessageSquare, group: 'Growth' },
@@ -82,7 +84,7 @@ export default function CommandPalette({ open, setOpen, onNavigate }: CommandPal
           className="flex h-11 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
         />
       </div>
-      <CommandList className="max-h-[300px] overflow-y-auto p-2">
+      <CommandList className="max-h-[400px] overflow-y-auto p-2">
         <CommandEmpty>{t('noResults') || 'No results found.'}</CommandEmpty>
 
         {/* Navigation Group */}

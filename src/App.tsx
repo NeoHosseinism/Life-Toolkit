@@ -79,37 +79,37 @@ const navGroups: { label: string; items: NavItemDef[] }[] = [
     ],
   },
   {
-    label: 'Planning',
+    label: 'Focus',
     items: [
       { id: 'planning',      icon: Layers },
       { id: 'timeblocking',  icon: Timer },
+      { id: 'pomodoro',      icon: Clock },
       { id: 'goals',         icon: Target },
       { id: 'habits',        icon: Sparkles },
     ],
   },
   {
-    label: 'Wellbeing',
+    label: 'Wellness',
     items: [
       { id: 'health',        icon: Heart },
-      { id: 'pomodoro',      icon: Clock },
       { id: 'meditation',    icon: BookOpen },
       { id: 'journal',       icon: PenLine },
       { id: 'psychology',    icon: Brain },
     ],
   },
   {
-    label: 'Life',
+    label: 'Finance',
     items: [
+      { id: 'money',         icon: Wallet },
       { id: 'debts',         icon: HandCoins },
-      { id: 'birthdays',     icon: Cake },
     ],
   },
   {
     label: 'Growth',
     items: [
       { id: 'learning',      icon: GraduationCap },
-      { id: 'money',         icon: Wallet },
       { id: 'prompts',       icon: MessageSquare },
+      { id: 'birthdays',     icon: Cake },
     ],
   },
   {
@@ -187,6 +187,15 @@ function AppContent() {
     );
   };
 
+  // Prefetch adjacent sections after 3s idle
+  useEffect(() => {
+    const id = setTimeout(() => {
+      import('@/sections/Tasks');
+      import('@/sections/CalendarView');
+    }, 3000);
+    return () => clearTimeout(id);
+  }, []);
+
   const { isDark, toggleTheme }               = useTheme();
   const { language, isRTL, setLanguage, t }   = useLanguage();
   const { getDashboardStats }                 = useApp();
@@ -237,7 +246,7 @@ function AppContent() {
                   `}
                 >
                   <Icon className={`shrink-0 w-[17px] h-[17px] ${isActive ? '' : 'group-hover:scale-110 transition-transform'}`} />
-                  <span className="flex-1 text-sm text-start capitalize">{t(favItem.id) || favItem.id.replace(/([A-Z])/g, ' $1').trim()}</span>
+                  <span className="flex-1 text-sm text-start">{t(favItem.id) || favItem.id.replace(/([A-Z])/g, ' $1').trim()}</span>
                   <button
                     onClick={(e) => { e.stopPropagation(); toggleFavorite(favItem.id); }}
                     className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-muted rounded"
@@ -285,7 +294,7 @@ function AppContent() {
                   <Icon className={`shrink-0 w-[17px] h-[17px] ${isActive ? '' : 'group-hover:scale-110 transition-transform'}`} />
                   {!compact && (
                     <>
-                      <span className="flex-1 text-sm text-start capitalize">{t(item.id) || item.id.replace(/([A-Z])/g, ' $1').trim()}</span>
+                      <span className="flex-1 text-sm text-start">{t(item.id) || item.id.replace(/([A-Z])/g, ' $1').trim()}</span>
                       <div className="flex items-center gap-1">
                         {!isFavorite && (
                           <button
@@ -391,7 +400,7 @@ function AppContent() {
               <Button variant="ghost" size="icon" className="lg:hidden shrink-0" onClick={() => setMobileOpen(true)} aria-label="Open menu">
                 <Menu className="w-5 h-5" />
               </Button>
-              <h1 className="text-lg font-semibold truncate capitalize">
+              <h1 className="text-lg font-semibold truncate">
                 {t(currentView) || currentView.replace(/([A-Z])/g, ' $1').trim()}
               </h1>
             </div>

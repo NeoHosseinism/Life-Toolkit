@@ -30,7 +30,7 @@ import type {
 
 const defaultSettings: UserSettings = {
   language: 'en',
-  calendar: 'gregorian',
+  calendar: 'jalali',
   currency: 'toman',
   theme: 'system',
   notifications: {

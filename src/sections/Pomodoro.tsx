@@ -162,7 +162,7 @@ export default function Pomodoro() {
 
       {/* Timer */}
       <div className="flex justify-center">
-        <Card className="w-full max-w-md">
+        <Card className="w-full max-w-md bg-card/50 backdrop-blur-sm">
           <CardContent className="p-8">
             {/* Timer Type Selector */}
             <div className="flex justify-center gap-2 mb-8">
@@ -185,9 +185,19 @@ export default function Pomodoro() {
             </div>
 
             {/* Timer Circle */}
-            <div className="relative w-64 h-64 mx-auto mb-8">
+            <div className="relative w-52 h-52 sm:w-64 sm:h-64 mx-auto mb-8">
+              {/* Pulsing ring when running */}
+              {isRunning && (
+                <motion.div
+                  className="absolute inset-0 rounded-full border-2"
+                  style={{ borderColor: config.color }}
+                  animate={{ scale: [1, 1.04, 1], opacity: [0.4, 0.7, 0.4] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                />
+              )}
+              <div className="relative w-full h-full">
               {/* Background circle */}
-              <svg className="w-full h-full -rotate-90">
+              <svg viewBox="0 0 256 256" className="w-full h-full -rotate-90">
                 <circle
                   cx="128"
                   cy="128"
@@ -220,6 +230,7 @@ export default function Pomodoro() {
                 </motion.div>
                 <p className="text-muted-foreground mt-2">{t(config.label)}</p>
               </div>
+              </div>
             </div>
 
             {/* Task Link */}
@@ -246,13 +257,13 @@ export default function Pomodoro() {
             )}
 
             {/* Controls */}
-            <div className="flex justify-center gap-4 mt-6">
+            <div className="flex items-center justify-center gap-4 mt-6">
               <Button
                 variant="outline"
                 size="icon"
                 onClick={resetTimer}
                 aria-label="Reset timer"
-                className="w-12 h-12"
+                className="w-11 h-11 rounded-full"
               >
                 <RotateCcw className="w-5 h-5" />
               </Button>
@@ -260,7 +271,7 @@ export default function Pomodoro() {
               <Button
                 onClick={toggleTimer}
                 aria-label={isRunning ? 'Pause timer' : 'Start timer'}
-                className="w-20 h-20 rounded-full btn-shine"
+                className="w-24 h-24 rounded-full btn-shine"
                 style={{ backgroundColor: config.color }}
               >
                 {isRunning ? <Pause className="w-8 h-8" /> : <Play className="w-8 h-8 ml-1" />}
@@ -271,7 +282,7 @@ export default function Pomodoro() {
                 size="icon"
                 onClick={skipTimer}
                 aria-label="Skip to next session"
-                className="w-12 h-12"
+                className="w-11 h-11 rounded-full"
               >
                 <SkipForward className="w-5 h-5" />
               </Button>

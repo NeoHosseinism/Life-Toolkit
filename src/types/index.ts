@@ -197,6 +197,8 @@ export interface UserSettings {
     autoStartBreaks: boolean;
     autoStartPomodoros: boolean;
   };
+  openRouterKey?: string;
+  aiModel?: string;
 }
 
 // ─── NEW: Planning types ───────────────────────────────────────────────────────

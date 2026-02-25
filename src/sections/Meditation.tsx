@@ -47,7 +47,7 @@ const durationOptions = [5, 10, 15, 20, 30, 45, 60];
 
 export default function Meditation() {
   const { meditations, addMeditation, deleteMeditation } = useApp();
-  const { t, toPersianNum } = useLanguage();
+  const { t, toPersianNum, isRTL } = useLanguage();
   
   const [isRunning, setIsRunning] = useState(false);
   const [timeLeft, setTimeLeft] = useState(600);
@@ -117,7 +117,7 @@ export default function Meditation() {
   return (
     <div className="space-y-6">
       {/* Stats */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <Card>
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">{t('sessions')}</p>
@@ -212,6 +212,17 @@ export default function Meditation() {
                 <p className="text-muted-foreground mt-2">{t(selectedTypeConfig?.label || 'mindfulness')}</p>
               </div>
             </div>
+
+            {/* Breathing cue */}
+            {selectedType === 'breathing' && isRunning && (
+              <motion.p
+                className="text-center text-sm text-muted-foreground mb-4 -mt-4"
+                animate={{ opacity: [0, 1, 1, 0] }}
+                transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+              >
+                {isRTL ? 'نفس بکش...' : 'Breathe in...'}
+              </motion.p>
+            )}
 
             {/* Controls */}
             <div className="flex justify-center gap-4">

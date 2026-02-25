@@ -205,8 +205,6 @@ export default function MobileNav({ currentView, onNavigate, onAddAction }: Mobi
         </div>
       </nav>
 
-      {/* Spacer for fixed bottom nav */}
-      <div className="lg:hidden h-16" />
     </>
   );
 }

@@ -25,12 +25,18 @@ const jalaliMonths = [
   'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'
 ];
 
+export const jalaliMonthsEn = [
+  'Farvardin', 'Ordibehesht', 'Khordad', 'Tir', 'Mordad', 'Shahrivar',
+  'Mehr', 'Aban', 'Azar', 'Dey', 'Bahman', 'Esfand'
+];
+
 const gregorianMonths = [
   'January', 'February', 'March', 'April', 'May', 'June',
   'July', 'August', 'September', 'October', 'November', 'December'
 ];
 
 const jalaliDays = ['شنبه', 'یکشنبه', 'دوشنبه', 'سه‌شنبه', 'چهارشنبه', 'پنجشنبه', 'جمعه'];
+export const jalaliDaysEn = ['Sha', 'Yek', 'Do', 'Se', 'Cha', 'Pan', 'Jom'];
 const gregorianDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 // Simple Gregorian to Jalali conversion
@@ -58,34 +64,52 @@ export function toJalali(date: Date): { year: number; month: number; day: number
 
 // Simple Jalali to Gregorian conversion
 export function toGregorian(jy: number, jm: number, jd: number): Date {
-  let gy = jy <= 979 ? 0 : 979;
-  const baseYear = jy <= 979 ? 621 : 1600;
-  let days = 365 * jy + Math.floor(jy / 33) * 8 + Math.floor(((jy % 33) + 3) / 4) + 78 + jd + (jm < 7 ? (jm - 1) * 31 : ((jm - 7) * 30) + 186);
+  // Normalize year so arithmetic works on a small base (KEY FIX: use jy0 not raw jy)
+  const jy0 = jy - (jy > 979 ? 979 : 0);
+  const base = jy > 979 ? 1600 : 621;
+  let days =
+    365 * jy0 +
+    Math.floor(jy0 / 33) * 8 +
+    Math.floor(((jy0 % 33) + 3) / 4) +
+    78 + jd +
+    (jm < 7 ? (jm - 1) * 31 : (jm - 7) * 30 + 186);
+  let gy = 0;
   gy += 400 * Math.floor(days / 146097);
   days %= 146097;
-  const leap = !(days % 4) && (days % 100 !== 0 || days % 400 === 0);
+  if (days > 36524) {
+    gy += 100 * Math.floor(--days / 36524);
+    days %= 36524;
+    if (days >= 365) days++;
+  }
+  gy += 4 * Math.floor(days / 1461);
   days %= 1461;
-  gy += Math.floor(days / 365) * 4;
-  days = (days % 365) + (leap ? 1 : 0);
-  const gm = days > 336 ? 12 : days > 305 ? 11 : days > 274 ? 10 : days > 244 ? 9 : days > 213 ? 8 : days > 182 ? 7 : days > 152 ? 6 : days > 121 ? 5 : days > 91 ? 4 : days > 60 ? 3 : days > 31 ? 2 : 1;
-  const gd = days - (gm > 2 ? 306 : 337) + (gm > 6 ? 30 : 31) * (gm - 1) + (gm === 12 && !leap ? -1 : 0);
-  
-  return new Date(baseYear + gy - (jy <= 979 ? 0 : 979), gm - 1, gd);
+  if (days > 365) {
+    gy += Math.floor((days - 1) / 365);
+    days = (days - 1) % 365;
+  }
+  let gd = days + 1;
+  const gyFull = gy + base;
+  const isLeap = !(gyFull % 4) && (gyFull % 100 !== 0 || !(gyFull % 400));
+  const daysInMonth = [0, 31, isLeap ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  let gm = 0;
+  for (gm = 0; gm < 13 && gd > daysInMonth[gm]; gm++) gd -= daysInMonth[gm];
+  return new Date(gyFull, gm - 1, gd);
 }
 
 export function formatDate(
   date: Date | string,
   formatStr: string,
   calendar: 'jalali' | 'gregorian' = 'gregorian',
-  _language?: 'fa' | 'en'
+  language?: 'fa' | 'en'
 ): string {
   const d = typeof date === 'string' ? parseISO(date) : date;
-  
+
   if (calendar === 'jalali') {
     const j = toJalali(d);
-    const dayName = jalaliDays[d.getDay()];
-    const monthName = jalaliMonths[j.month - 1];
-    
+    const useEn = language === 'en';
+    const dayName = useEn ? jalaliDaysEn[(d.getDay() + 1) % 7] : jalaliDays[(d.getDay() + 1) % 7];
+    const monthName = useEn ? jalaliMonthsEn[j.month - 1] : jalaliMonths[j.month - 1];
+
     return formatStr
       .replace('yyyy', String(j.year))
       .replace('MM', String(j.month).padStart(2, '0'))
@@ -93,20 +117,20 @@ export function formatDate(
       .replace('MMMM', monthName)
       .replace('EEEE', dayName);
   }
-  
+
   return format(d, formatStr);
 }
 
-export function getMonthName(month: number, calendar: 'jalali' | 'gregorian' = 'gregorian'): string {
+export function getMonthName(month: number, calendar: 'jalali' | 'gregorian' = 'gregorian', language?: 'fa' | 'en'): string {
   if (calendar === 'jalali') {
-    return jalaliMonths[month - 1];
+    return language === 'en' ? jalaliMonthsEn[month - 1] : jalaliMonths[month - 1];
   }
   return gregorianMonths[month];
 }
 
-export function getDayName(day: number, calendar: 'jalali' | 'gregorian' = 'gregorian'): string {
+export function getDayName(day: number, calendar: 'jalali' | 'gregorian' = 'gregorian', language?: 'fa' | 'en'): string {
   if (calendar === 'jalali') {
-    return jalaliDays[day];
+    return language === 'en' ? jalaliDaysEn[day] : jalaliDays[day];
   }
   return gregorianDays[day];
 }

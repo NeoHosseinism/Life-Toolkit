@@ -69,9 +69,9 @@ const PRIORITY_ORDER: Record<TaskPriority, number> = { high: 0, medium: 1, low: 
 
 const quadrants: { id: EisenhowerQuadrant; title: string; subtitle: string; color: string; bgColor: string; borderColor: string }[] = [
   { id: 'doFirst',   title: 'doFirst',   subtitle: 'urgent + important',     color: '#ef4444', bgColor: 'rgba(239,68,68,0.08)',   borderColor: 'rgba(239,68,68,0.3)' },
-  { id: 'schedule',  title: 'schedule',  subtitle: 'important, not urgent',  color: '#3b82f6', bgColor: 'rgba(59,130,246,0.08)',  borderColor: 'rgba(59,130,246,0.3)' },
+  { id: 'schedule',  title: 'schedule',  subtitle: 'important, not urgent',  color: '#22c55e', bgColor: 'rgba(34,197,94,0.08)',   borderColor: 'rgba(34,197,94,0.3)' },
   { id: 'delegate',  title: 'delegate',  subtitle: 'urgent, not important',  color: '#f97316', bgColor: 'rgba(249,115,22,0.08)',  borderColor: 'rgba(249,115,22,0.3)' },
-  { id: 'eliminate', title: 'eliminate', subtitle: 'neither',                color: '#22c55e', bgColor: 'rgba(34,197,94,0.08)',   borderColor: 'rgba(34,197,94,0.3)' },
+  { id: 'eliminate', title: 'eliminate', subtitle: 'neither',                color: '#6b7280', bgColor: 'rgba(107,114,128,0.08)', borderColor: 'rgba(107,114,128,0.3)' },
 ];
 
 type ViewMode  = 'kanban' | 'list' | 'matrix';
@@ -359,15 +359,29 @@ export default function Tasks() {
         </div>
 
         <div className="flex items-center gap-2">
-          <div className="relative">
-            <Search className={`w-4 h-4 absolute ${isRTL ? 'right-3' : 'left-3'} top-1/2 -translate-y-1/2 text-muted-foreground`} />
+          <div className="relative flex items-center">
+            <Search className={`w-4 h-4 absolute ${isRTL ? 'right-3' : 'left-3'} top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none`} />
             <Input
               placeholder={t('search')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className={`${isRTL ? 'pr-9' : 'pl-9'} w-48`}
+              className={`${isRTL ? 'pr-9' : 'pl-9'} ${searchQuery ? (isRTL ? 'pl-8' : 'pr-8') : ''} w-48`}
             />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery('')}
+                className={`absolute ${isRTL ? 'left-2' : 'right-2'} top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground`}
+                aria-label="Clear search"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
           </div>
+          {searchQuery && (
+            <span className="text-xs text-muted-foreground whitespace-nowrap">
+              {toPersianNum(filteredTasks.length)} {t('tasks')}
+            </span>
+          )}
 
           {/* Filter + Sort dropdown */}
           <DropdownMenu>

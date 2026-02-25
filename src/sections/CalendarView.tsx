@@ -31,12 +31,14 @@ import {
   getCalendarYear,
   getCalendarMonth,
   getCalendarDate,
+  jalaliMonthsEn,
+  jalaliDaysEn,
 } from '@/lib/calendar';
 import type { CalendarView } from '@/types';
 
 export default function CalendarView() {
   const { events, tasks, addEvent } = useApp();
-  const { t, toPersianNum, calendar, isRTL } = useLanguage();
+  const { t, toPersianNum, calendar, isRTL, language } = useLanguage();
   const [currentDate, setCurrentDate] = useState(new Date());
   const [viewMode, setViewMode] = useState<CalendarView>('month');
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -61,7 +63,7 @@ export default function CalendarView() {
   const calendarDays = getCalendarDays(year, month, calendar);
 
   const weekDays = calendar === 'jalali'
-    ? ['شنبه', 'یکشنبه', 'دوشنبه', 'سه‌شنبه', 'چهارشنبه', 'پنجشنبه', 'جمعه']
+    ? (language === 'en' ? jalaliDaysEn : ['شنبه', 'یکشنبه', 'دوشنبه', 'سه‌شنبه', 'چهارشنبه', 'پنجشنبه', 'جمعه'])
     : ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
   const getEventsForDate = (date: Date) => {
@@ -246,9 +248,11 @@ export default function CalendarView() {
               {isRTL ? <ChevronLeft className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
             </Button>
           </div>
-          <h2 className="text-xl font-bold" dir={calendar === 'jalali' ? 'rtl' : 'ltr'}>
+          <h2 className="text-xl font-bold" dir={calendar === 'jalali' && language === 'fa' ? 'rtl' : 'ltr'}>
             {calendar === 'jalali'
-              ? `${['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'][month - 1]} ${toPersianNum(year)}`
+              ? language === 'en'
+                ? `${jalaliMonthsEn[month - 1]} ${year}`
+                : `${['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'][month - 1]} ${toPersianNum(year)}`
               : `${['January','February','March','April','May','June','July','August','September','October','November','December'][month - 1]} ${year}`}
           </h2>
         </div>
