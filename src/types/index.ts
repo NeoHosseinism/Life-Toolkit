@@ -175,6 +175,7 @@ export interface PomodoroSession {
   duration: number;
   type: 'focus' | 'shortBreak' | 'longBreak';
   completed: boolean;
+  taskId?: string;
 }
 
 export interface UserSettings {

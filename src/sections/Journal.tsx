@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   BookOpen, Sparkles, ChevronLeft, ChevronRight, Settings2,
@@ -430,7 +431,7 @@ export default function Journal() {
       saveEntry(entry);
     } catch (err) {
       console.error('[journal] OpenRouter error:', err);
-      setAiInsight(`⚠️ Error: ${(err as Error).message}`);
+      toast.error('AI analysis failed: ' + (err as Error).message);
     } finally {
       setAiLoading(false);
     }

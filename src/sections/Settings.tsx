@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { toast } from 'sonner';
 import {
   Settings,
   Globe,
@@ -75,10 +76,16 @@ export default function SettingsView() {
 
   const handleImport = () => {
     try {
-      importData(importJson);
-      setImportJson('');
+      const ok = importData(importJson);
+      if (ok) {
+        setImportJson('');
+        toast.success('Data imported successfully');
+      } else {
+        toast.error('Import failed: invalid format');
+      }
     } catch (error) {
       console.error('Import failed:', error);
+      toast.error('Import failed: ' + (error as Error).message);
     }
   };
 
@@ -90,22 +97,22 @@ export default function SettingsView() {
   return (
     <div className="space-y-6">
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4">
           <TabsTrigger value="general" className="flex items-center gap-2">
             <Settings className="w-4 h-4" />
-            <span className="hidden sm:inline">{t('general')}</span>
+            <span>{t('general')}</span>
           </TabsTrigger>
           <TabsTrigger value="appearance" className="flex items-center gap-2">
             <Moon className="w-4 h-4" />
-            <span className="hidden sm:inline">{t('appearance')}</span>
+            <span>{t('appearance')}</span>
           </TabsTrigger>
           <TabsTrigger value="notifications" className="flex items-center gap-2">
             <Bell className="w-4 h-4" />
-            <span className="hidden sm:inline">{t('notifications')}</span>
+            <span>{t('notifications')}</span>
           </TabsTrigger>
           <TabsTrigger value="data" className="flex items-center gap-2">
             <Download className="w-4 h-4" />
-            <span className="hidden sm:inline">{t('data')}</span>
+            <span>{t('data')}</span>
           </TabsTrigger>
         </TabsList>
 

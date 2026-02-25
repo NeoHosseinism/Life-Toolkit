@@ -11,6 +11,7 @@ import {
   Settings,
   History,
   Flame,
+  Link2,
 } from 'lucide-react';
 import { useApp } from '@/contexts/AppContext';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -35,15 +36,19 @@ const timerConfigs: Record<TimerType, { minutes: number; label: string; color: s
 };
 
 export default function Pomodoro() {
-  const { pomodoroSessions, addPomodoroSession, settings, updateSettings } = useApp();
-  const { t, toPersianNum } = useLanguage();
-  
-  const [timerType, setTimerType] = useState<TimerType>('focus');
-  const [timeLeft, setTimeLeft] = useState(timerConfigs.focus.minutes * 60);
-  const [isRunning, setIsRunning] = useState(false);
+  const { pomodoroSessions, addPomodoroSession, settings, updateSettings, tasks } = useApp();
+  const { t, toPersianNum, isRTL } = useLanguage();
+
+  const [timerType, setTimerType]       = useState<TimerType>('focus');
+  const [timeLeft, setTimeLeft]         = useState(timerConfigs.focus.minutes * 60);
+  const [isRunning, setIsRunning]       = useState(false);
   const [sessionsCompleted, setSessionsCompleted] = useState(0);
-  
+  const [linkedTaskId, setLinkedTaskId] = useState<string>('none');
+
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Only show incomplete tasks for linking
+  const activeTasks = tasks.filter(t => t.status !== 'done');
 
   const config = timerConfigs[timerType];
   const totalTime = config.minutes * 60;
@@ -80,6 +85,7 @@ export default function Pomodoro() {
       duration: totalTime,
       type: timerType,
       completed: true,
+      taskId: linkedTaskId !== 'none' ? linkedTaskId : undefined,
     });
 
     if (timerType === 'focus' && settings.pomodoro.autoStartBreaks) {
@@ -216,33 +222,55 @@ export default function Pomodoro() {
               </div>
             </div>
 
+            {/* Task Link */}
+            {activeTasks.length > 0 && (
+              <div className="mt-6">
+                <div className={`flex items-center gap-2 mb-1.5 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                  <Link2 className="w-3.5 h-3.5 text-muted-foreground" />
+                  <span className="text-xs text-muted-foreground">{isRTL ? 'پیوند به وظیفه' : 'Link to task'}</span>
+                </div>
+                <Select value={linkedTaskId} onValueChange={setLinkedTaskId} disabled={isRunning}>
+                  <SelectTrigger className="h-8 text-xs">
+                    <SelectValue placeholder={isRTL ? 'انتخاب وظیفه...' : 'Select task...'} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="none">{isRTL ? 'بدون پیوند' : 'No task'}</SelectItem>
+                    {activeTasks.map(task => (
+                      <SelectItem key={task.id} value={task.id}>
+                        <span className="truncate">{task.title}</span>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+
             {/* Controls */}
-            <div className="flex justify-center gap-4">
+            <div className="flex justify-center gap-4 mt-6">
               <Button
                 variant="outline"
                 size="icon"
                 onClick={resetTimer}
+                aria-label="Reset timer"
                 className="w-12 h-12"
               >
                 <RotateCcw className="w-5 h-5" />
               </Button>
-              
+
               <Button
                 onClick={toggleTimer}
+                aria-label={isRunning ? 'Pause timer' : 'Start timer'}
                 className="w-20 h-20 rounded-full btn-shine"
                 style={{ backgroundColor: config.color }}
               >
-                {isRunning ? (
-                  <Pause className="w-8 h-8" />
-                ) : (
-                  <Play className="w-8 h-8 ml-1" />
-                )}
+                {isRunning ? <Pause className="w-8 h-8" /> : <Play className="w-8 h-8 ml-1" />}
               </Button>
-              
+
               <Button
                 variant="outline"
                 size="icon"
                 onClick={skipTimer}
+                aria-label="Skip to next session"
                 className="w-12 h-12"
               >
                 <SkipForward className="w-5 h-5" />

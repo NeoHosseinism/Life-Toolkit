@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
+import React, { createContext, useContext, useEffect, useRef, useState, useCallback } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { loadState, saveState, clearState, exportData as exportDataUtil, importData as importDataUtil, EXTRA_MIGRATIONS, CURRENT_SCHEMA_VERSION } from '@/lib/storage';
 import type {
@@ -221,11 +221,17 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     setIsLoaded(true);
   }, []);
 
-  // Persist on every change
+  // Persist on every change (debounced 500ms to avoid blocking the main thread)
+  const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => {
-    if (isLoaded) {
+    if (!isLoaded) return;
+    if (saveTimer.current) clearTimeout(saveTimer.current);
+    saveTimer.current = setTimeout(() => {
       saveState(state);
-    }
+    }, 500);
+    return () => {
+      if (saveTimer.current) clearTimeout(saveTimer.current);
+    };
   }, [state, isLoaded]);
 
   // Task operations

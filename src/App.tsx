@@ -15,6 +15,8 @@ import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { startNotificationScheduler } from '@/lib/notifications';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Toaster } from '@/components/ui/sonner';
+import ErrorBoundary from '@/components/ErrorBoundary';
 import CommandPalette, { CommandPaletteHint } from '@/components/CommandPalette';
 import MobileNav from '@/components/MobileNav';
 
@@ -145,9 +147,11 @@ function renderView(view: ViewType) {
   const Section = sectionMap[view];
 
   return (
-    <Suspense fallback={<SectionLoader />}>
-      <Section />
-    </Suspense>
+    <ErrorBoundary>
+      <Suspense fallback={<SectionLoader />}>
+        <Section />
+      </Suspense>
+    </ErrorBoundary>
   );
 }
 
@@ -354,6 +358,7 @@ function AppContent() {
           {/* Collapse toggle */}
           <button
             onClick={() => setCollapsed((c) => !c)}
+            aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
             className={`
               absolute top-1/2 -translate-y-1/2 w-5 h-9 flex items-center justify-center
               bg-card border border-border/60 rounded-full shadow-sm z-10
@@ -383,7 +388,7 @@ function AppContent() {
           {/* Header */}
           <header className="shrink-0 sticky top-0 z-40 flex items-center justify-between px-4 py-3 lg:px-6 border-b border-border/40 bg-background/80 backdrop-blur-xl">
             <div className="flex items-center gap-3 min-w-0">
-              <Button variant="ghost" size="icon" className="lg:hidden shrink-0" onClick={() => setMobileOpen(true)}>
+              <Button variant="ghost" size="icon" className="lg:hidden shrink-0" onClick={() => setMobileOpen(true)} aria-label="Open menu">
                 <Menu className="w-5 h-5" />
               </Button>
               <h1 className="text-lg font-semibold truncate capitalize">
@@ -391,19 +396,19 @@ function AppContent() {
               </h1>
             </div>
             <div className="flex items-center gap-1 shrink-0">
-              <Button 
-                variant="ghost" 
-                size="icon" 
+              <Button
+                variant="ghost"
+                size="icon"
                 onClick={() => setCommandPaletteOpen(true)}
                 className="hidden md:flex"
-                title="Search (Cmd+K)"
+                aria-label="Search (Cmd+K)"
               >
                 <Search className="w-4 h-4" />
               </Button>
-              <Button variant="ghost" size="icon" onClick={toggleTheme} className="hidden sm:flex">
+              <Button variant="ghost" size="icon" onClick={toggleTheme} className="hidden sm:flex" aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}>
                 {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
               </Button>
-              <Button variant="ghost" size="icon" onClick={() => setLanguage(language === 'fa' ? 'en' : 'fa')} className="hidden sm:flex">
+              <Button variant="ghost" size="icon" onClick={() => setLanguage(language === 'fa' ? 'en' : 'fa')} className="hidden sm:flex" aria-label="Toggle language">
                 <Globe className="w-4 h-4" />
               </Button>
             </div>
@@ -454,6 +459,7 @@ export default function App() {
       <LanguageProvider>
         <AppProvider>
           <AppContent />
+          <Toaster position="bottom-right" richColors />
         </AppProvider>
       </LanguageProvider>
     </ThemeProvider>

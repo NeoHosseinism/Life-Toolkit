@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, memo } from 'react';
 import { motion } from 'framer-motion';
 import type { Variants } from 'framer-motion';
 import {
@@ -22,12 +22,43 @@ import {
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { staggerChildren: 0.08 } },
+  visible: { opacity: 1, transition: { staggerChildren: 0.04 } },
 };
 const itemVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] as const } },
 };
+
+// ─── StatCard (module-level for React.memo stability) ────────────────────────
+
+const StatCard = memo(({ title, value, subtitle, icon: Icon, trend, trendUp, color }: {
+  title: string; value: string | number; subtitle?: string; icon: React.ElementType;
+  trend?: string; trendUp?: boolean; color: string;
+}) => (
+  <motion.div variants={itemVariants}>
+    <Card className="card-hover overflow-hidden">
+      <CardContent className="p-5">
+        <div className="flex items-start justify-between">
+          <div className="flex-1">
+            <p className="text-sm text-muted-foreground">{title}</p>
+            <h3 className="text-2xl font-bold mt-1">{value}</h3>
+            {subtitle && <p className="text-xs text-muted-foreground mt-1">{subtitle}</p>}
+            {trend && (
+              <div className={`flex items-center gap-1 mt-2 text-sm ${trendUp ? 'text-green-500' : 'text-red-500'}`}>
+                {trendUp ? <ArrowUpRight className="w-4 h-4" /> : <ArrowDownRight className="w-4 h-4" />}
+                <span>{trend}</span>
+              </div>
+            )}
+          </div>
+          <div className="w-11 h-11 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${color}20` }}>
+            <Icon className="w-5 h-5" style={{ color }} />
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  </motion.div>
+));
+StatCard.displayName = 'StatCard';
 
 // ─── Shared chart styles ──────────────────────────────────────────────────────
 
@@ -153,30 +184,32 @@ export default function Dashboard() {
     return d.toISOString().split('T')[0];
   }), []);
 
-  const taskChartData = last7Days.map(date => ({
+  const taskChartData = useMemo(() => last7Days.map(date => ({
     name: date.slice(5),
     completed: tasks.filter(t => t.completedAt?.startsWith(date)).length,
-  }));
+  })), [last7Days, tasks]);
 
-  const focusTimeData = last7Days.map(date => ({
+  const focusTimeData = useMemo(() => last7Days.map(date => ({
     name: date.slice(5),
     minutes: Math.round(pomodoroSessions.filter(s => s.startTime.startsWith(date) && s.completed).reduce((sum, s) => sum + s.duration, 0) / 60 * 10) / 10,
-  }));
+  })), [last7Days, pomodoroSessions]);
 
   // ── Expense categories (donut with total) ──
-  const expenseCats = [
-    { name: t('necessary'),    value: 0, color: '#22c55e' },
-    { name: t('emergency'),    value: 0, color: '#ef4444' },
-    { name: t('semiNecessary'),value: 0, color: '#f59e0b' },
-    { name: t('donating'),     value: 0, color: '#3b82f6' },
-    { name: t('fun'),          value: 0, color: '#8b5cf6' },
-  ];
-  transactions.filter(tr => tr.type === 'expense').forEach(tr => {
-    const cat = expenseCats.find(c => c.name === t(tr.category));
-    if (cat) cat.value += tr.amount;
-  });
-  const totalExpenses = expenseCats.reduce((s, c) => s + c.value, 0);
-  const hasExpenses = totalExpenses > 0;
+  const { expenseCats, totalExpenses, hasExpenses } = useMemo(() => {
+    const cats = [
+      { name: t('necessary'),    value: 0, color: '#22c55e' },
+      { name: t('emergency'),    value: 0, color: '#ef4444' },
+      { name: t('semiNecessary'),value: 0, color: '#f59e0b' },
+      { name: t('donating'),     value: 0, color: '#3b82f6' },
+      { name: t('fun'),          value: 0, color: '#8b5cf6' },
+    ];
+    transactions.filter(tr => tr.type === 'expense').forEach(tr => {
+      const cat = cats.find(c => c.name === t(tr.category));
+      if (cat) cat.value += tr.amount;
+    });
+    const total = cats.reduce((s, c) => s + c.value, 0);
+    return { expenseCats: cats, totalExpenses: total, hasExpenses: total > 0 };
+  }, [transactions, t]);
 
   // ── Last 30 days ──
   const last30Days = useMemo(() => Array.from({ length: 30 }, (_, i) => {
@@ -187,7 +220,8 @@ export default function Dashboard() {
 
   // ── Life Balance Radar ──
   const lifeBalanceData = useMemo(() => {
-    const exerciseCount = exercises.filter(e => last30Days.includes(e.date)).length;
+    const last30DaysSet = new Set(last30Days);
+    const exerciseCount = exercises.filter(e => last30DaysSet.has(e.date)).length;
     const healthScore = Math.min(100, Math.round((exerciseCount / 20) * 100));
 
     const income = transactions.filter(tr => tr.type === 'income').reduce((s, tr) => s + tr.amount, 0);
@@ -198,10 +232,10 @@ export default function Dashboard() {
     const learningScore = allProgress.length > 0 ? Math.round(allProgress.reduce((s, p) => s + p, 0) / allProgress.length) : 0;
 
     const habitScore = habits.length > 0 ? Math.min(100, Math.round(
-      habits.reduce((sum, h) => sum + (h.completions.filter(c => last30Days.includes(c)).length / 30) * 100, 0) / habits.length
+      habits.reduce((sum, h) => sum + (h.completions.filter(c => last30DaysSet.has(c)).length / 30) * 100, 0) / habits.length
     )) : 0;
 
-    const meditationCount = meditations.filter(m => last30Days.includes(m.date)).length;
+    const meditationCount = meditations.filter(m => last30DaysSet.has(m.date)).length;
     const meditationScore = Math.min(100, Math.round((meditationCount / 15) * 100));
 
     const activeGoals = goals.filter(g => g.status === 'active');
@@ -219,10 +253,10 @@ export default function Dashboard() {
   }, [exercises, transactions, courses, books, habits, meditations, goals, last30Days, taskCompletionRate, isRTL]);
 
   // ── 30-day habit completion trend ──
-  const habitTrendData = last30Days.map(date => ({
+  const habitTrendData = useMemo(() => last30Days.map(date => ({
     name: date.slice(5),
     completions: habits.filter(h => h.completions.includes(date)).length,
-  }));
+  })), [last30Days, habits]);
 
   // ── Activity heatmap data ──
   const heatmapData = useMemo(() => {
@@ -254,40 +288,12 @@ export default function Dashboard() {
   }, [habits, tasks, pomodoroSessions, today]);
 
   // ── Habit streak horizontal bars ──
-  const habitStreakData = habits
+  const habitStreakData = useMemo(() => habits
     .filter(h => h.streak > 0)
     .sort((a, b) => b.streak - a.streak)
     .slice(0, 6)
-    .map(h => ({ name: h.name, streak: h.streak, fill: h.color }));
-
-  // ── StatCard ──
-  const StatCard = ({ title, value, subtitle, icon: Icon, trend, trendUp, color }: {
-    title: string; value: string | number; subtitle?: string; icon: React.ElementType;
-    trend?: string; trendUp?: boolean; color: string;
-  }) => (
-    <motion.div variants={itemVariants}>
-      <Card className="card-hover overflow-hidden">
-        <CardContent className="p-5">
-          <div className="flex items-start justify-between">
-            <div className="flex-1">
-              <p className="text-sm text-muted-foreground">{title}</p>
-              <h3 className="text-2xl font-bold mt-1">{value}</h3>
-              {subtitle && <p className="text-xs text-muted-foreground mt-1">{subtitle}</p>}
-              {trend && (
-                <div className={`flex items-center gap-1 mt-2 text-sm ${trendUp ? 'text-green-500' : 'text-red-500'}`}>
-                  {trendUp ? <ArrowUpRight className="w-4 h-4" /> : <ArrowDownRight className="w-4 h-4" />}
-                  <span>{trend}</span>
-                </div>
-              )}
-            </div>
-            <div className="w-11 h-11 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${color}20` }}>
-              <Icon className="w-5 h-5" style={{ color }} />
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-    </motion.div>
-  );
+    .map(h => ({ name: h.name, streak: h.streak, fill: h.color })),
+  [habits]);
 
   return (
     <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-6">
