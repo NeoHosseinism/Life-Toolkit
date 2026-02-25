@@ -1,4 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Vazirmatn:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Vazirmatn:wght@100;200;300;400;500;600;700;800;900&family=Estedad:wdth,wght@100,100..900&display=swap');
+/* Sahel & Shabnam via fontcdn.ir */
+@import url('https://cdn.fontcdn.ir/Font/Persian/Sahel/Sahel.css');
+@import url('https://cdn.fontcdn.ir/Font/Persian/Shabnam/Shabnam.css');
+@import url('https://cdn.fontcdn.ir/Font/Persian/IRANSans/IRANSans.css');
 
 @tailwind base;
 @tailwind components;
@@ -48,10 +52,18 @@
     --priority-low: 142 71% 45%;
     --priority-none: 220 9% 46%;
 
-    /* Glass Effect */
-    --glass-bg: rgba(255, 255, 255, 0.7);
-    --glass-border: rgba(255, 255, 255, 0.3);
-    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    /* Glass Effect — enhanced */
+    --glass-bg: rgba(255, 255, 255, 0.60);
+    --glass-bg-strong: rgba(255, 255, 255, 0.82);
+    --glass-border: rgba(255, 255, 255, 0.45);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.06), 0 1px 0 rgba(255,255,255,0.8) inset;
+    --surface-1: rgba(255, 255, 255, 0.50);
+    --surface-2: rgba(255, 255, 255, 0.70);
+    --surface-3: rgba(255, 255, 255, 0.92);
+
+    /* Font system */
+    --persian-font: 'Vazirmatn', sans-serif;
+    --english-font: 'Inter', sans-serif;
   }
 
   .dark {
@@ -84,9 +96,13 @@
     --sidebar-border: 0 0% 20%;
     --sidebar-ring: 217 91% 53%;
 
-    --glass-bg: rgba(30, 30, 30, 0.7);
-    --glass-border: rgba(255, 255, 255, 0.1);
-    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    --glass-bg: rgba(15, 15, 20, 0.62);
+    --glass-bg-strong: rgba(15, 15, 20, 0.88);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.42), 0 1px 0 rgba(255,255,255,0.05) inset;
+    --surface-1: rgba(255, 255, 255, 0.04);
+    --surface-2: rgba(255, 255, 255, 0.07);
+    --surface-3: rgba(255, 255, 255, 0.10);
   }
 }
 
@@ -101,12 +117,19 @@
   
   body {
     @apply bg-background text-foreground antialiased;
-    font-family: 'Inter', 'Vazirmatn', sans-serif;
+    font-family: var(--english-font, 'Inter'), sans-serif;
   }
 
   body[dir="rtl"] {
-    font-family: 'Vazirmatn', 'Inter', sans-serif;
+    font-family: var(--persian-font, 'Vazirmatn'), sans-serif;
   }
+
+  /* Font class helpers applied by FontManager */
+  .font-persian-vazirmatn { --persian-font: 'Vazirmatn', sans-serif; }
+  .font-persian-iran-sans  { --persian-font: 'IRANSans', 'Vazirmatn', sans-serif; }
+  .font-persian-sahel      { --persian-font: 'Sahel', 'Vazirmatn', sans-serif; }
+  .font-persian-shabnam    { --persian-font: 'Shabnam', 'Vazirmatn', sans-serif; }
+  .font-persian-estedad    { --persian-font: 'Estedad', 'Vazirmatn', sans-serif; }
 }
 
 @layer components {

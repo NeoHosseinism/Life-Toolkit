@@ -22,6 +22,10 @@ import type {
   TaskStatus,
   TaskPriority,
   EisenhowerQuadrant,
+  MaterialDebt,
+  SpiritualObligation,
+  Birthday,
+  FontSettings,
 } from '@/types';
 
 const defaultSettings: UserSettings = {
@@ -43,6 +47,12 @@ const defaultSettings: UserSettings = {
     autoStartBreaks: false,
     autoStartPomodoros: false,
   },
+};
+
+const defaultFontSettings: FontSettings = {
+  persianFont: 'vazirmatn',
+  englishFont: 'inter',
+  usePersianNumerals: false,
 };
 
 const defaultState: AppState = {
@@ -75,6 +85,10 @@ const defaultState: AppState = {
     },
   },
   notificationRules: [],
+  debts: [],
+  spiritualObligations: [],
+  birthdays: [],
+  fontSettings: defaultFontSettings,
 };
 
 interface AppContextType extends AppState {
@@ -160,6 +174,24 @@ interface AppContextType extends AppState {
   importData: (json: string) => boolean;
   resetData: () => void;
   
+  // Debt operations
+  addDebt: (debt: Omit<MaterialDebt, 'id' | 'createdAt'>) => void;
+  updateDebt: (id: string, updates: Partial<MaterialDebt>) => void;
+  deleteDebt: (id: string) => void;
+
+  // Spiritual obligation operations
+  addSpiritualObligation: (obl: Omit<SpiritualObligation, 'id' | 'createdAt'>) => void;
+  updateSpiritualObligation: (id: string, updates: Partial<SpiritualObligation>) => void;
+  deleteSpiritualObligation: (id: string) => void;
+
+  // Birthday operations
+  addBirthday: (birthday: Omit<Birthday, 'id' | 'createdAt'>) => void;
+  updateBirthday: (id: string, updates: Partial<Birthday>) => void;
+  deleteBirthday: (id: string) => void;
+
+  // Font settings
+  updateFontSettings: (settings: Partial<FontSettings>) => void;
+
   // Stats
   getDashboardStats: () => {
     totalTasks: number;
@@ -605,6 +637,68 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     clearState();
   }, []);
 
+  // Debt operations
+  const addDebt = useCallback((debt: Omit<MaterialDebt, 'id' | 'createdAt'>) => {
+    const newDebt: MaterialDebt = { ...debt, id: uuidv4(), createdAt: new Date().toISOString() };
+    setState(prev => ({ ...prev, debts: [...(prev.debts ?? []), newDebt] }));
+  }, []);
+
+  const updateDebt = useCallback((id: string, updates: Partial<MaterialDebt>) => {
+    setState(prev => ({
+      ...prev,
+      debts: (prev.debts ?? []).map(d => d.id === id ? { ...d, ...updates } : d),
+    }));
+  }, []);
+
+  const deleteDebt = useCallback((id: string) => {
+    setState(prev => ({ ...prev, debts: (prev.debts ?? []).filter(d => d.id !== id) }));
+  }, []);
+
+  // Spiritual obligation operations
+  const addSpiritualObligation = useCallback((obl: Omit<SpiritualObligation, 'id' | 'createdAt'>) => {
+    const newObl: SpiritualObligation = { ...obl, id: uuidv4(), createdAt: new Date().toISOString() };
+    setState(prev => ({ ...prev, spiritualObligations: [...(prev.spiritualObligations ?? []), newObl] }));
+  }, []);
+
+  const updateSpiritualObligation = useCallback((id: string, updates: Partial<SpiritualObligation>) => {
+    setState(prev => ({
+      ...prev,
+      spiritualObligations: (prev.spiritualObligations ?? []).map(o => o.id === id ? { ...o, ...updates } : o),
+    }));
+  }, []);
+
+  const deleteSpiritualObligation = useCallback((id: string) => {
+    setState(prev => ({
+      ...prev,
+      spiritualObligations: (prev.spiritualObligations ?? []).filter(o => o.id !== id),
+    }));
+  }, []);
+
+  // Birthday operations
+  const addBirthday = useCallback((birthday: Omit<Birthday, 'id' | 'createdAt'>) => {
+    const newBirthday: Birthday = { ...birthday, id: uuidv4(), createdAt: new Date().toISOString() };
+    setState(prev => ({ ...prev, birthdays: [...(prev.birthdays ?? []), newBirthday] }));
+  }, []);
+
+  const updateBirthday = useCallback((id: string, updates: Partial<Birthday>) => {
+    setState(prev => ({
+      ...prev,
+      birthdays: (prev.birthdays ?? []).map(b => b.id === id ? { ...b, ...updates } : b),
+    }));
+  }, []);
+
+  const deleteBirthday = useCallback((id: string) => {
+    setState(prev => ({ ...prev, birthdays: (prev.birthdays ?? []).filter(b => b.id !== id) }));
+  }, []);
+
+  // Font settings
+  const updateFontSettings = useCallback((settings: Partial<FontSettings>) => {
+    setState(prev => ({
+      ...prev,
+      fontSettings: { ...(prev.fontSettings ?? { persianFont: 'vazirmatn', englishFont: 'inter', usePersianNumerals: false }), ...settings },
+    }));
+  }, []);
+
   // Stats
   const getDashboardStats = useCallback(() => {
     const today = new Date().toISOString().split('T')[0];
@@ -689,6 +783,16 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         importData,
         resetData,
         getDashboardStats,
+        addDebt,
+        updateDebt,
+        deleteDebt,
+        addSpiritualObligation,
+        updateSpiritualObligation,
+        deleteSpiritualObligation,
+        addBirthday,
+        updateBirthday,
+        deleteBirthday,
+        updateFontSettings,
       }}
     >
       {children}

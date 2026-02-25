@@ -276,4 +276,36 @@ export const EXTRA_MIGRATIONS = [
       })),
     }),
   },
+  {
+    version: 7,
+    description: 'Add debts and spiritual obligations',
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    up: (data: any) => ({
+      ...data,
+      debts: data.debts ?? [],
+      spiritualObligations: data.spiritualObligations ?? [],
+    }),
+  },
+  {
+    version: 8,
+    description: 'Add birthdays',
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    up: (data: any) => ({
+      ...data,
+      birthdays: data.birthdays ?? [],
+    }),
+  },
+  {
+    version: 9,
+    description: 'Add font settings',
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    up: (data: any) => ({
+      ...data,
+      fontSettings: data.fontSettings ?? {
+        persianFont: 'vazirmatn',
+        englishFont: 'inter',
+        usePersianNumerals: false,
+      },
+    }),
+  },
 ];

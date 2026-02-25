@@ -124,11 +124,19 @@ export function getCalendarDays(
     const nextMonthAdjusted = nextMonth > 12 ? 1 : nextMonth;
     const endJalali = toGregorian(nextYear, nextMonthAdjusted, 1);
     endJalali.setDate(endJalali.getDate() - 1);
-    
-    // Adjust to start from Saturday (Jalali week starts on Saturday)
-    const startDay = startJalali.getDay();
+
+    // Jalali week starts on Saturday (getDay()=6).
+    // Offset formula: (getDay() + 1) % 7
+    //   Saturday(6) → 0  (no padding)
+    //   Sunday(0)   → 1
+    //   Monday(1)   → 2
+    //   Tuesday(2)  → 3
+    //   Wednesday(3)→ 4
+    //   Thursday(4) → 5
+    //   Friday(5)   → 6
+    const startDay = (startJalali.getDay() + 1) % 7;
     const adjustedStart = subDays(startJalali, startDay);
-    
+
     const daysInRange = eachDayOfInterval({ start: adjustedStart, end: endJalali }).length;
     return eachDayOfInterval({ start: adjustedStart, end: addDays(endJalali, 42 - daysInRange) });
   }

@@ -363,6 +363,17 @@ export interface AppState {
   // New sections (added via migrations)
   planning: PlanningState;
   promptLibrary: PromptLibraryState;
+  // v4+
+  timeBlocks: TimeBlock[];
+  journal: { entries: JournalEntry[]; settings: JournalSettings };
+  notificationRules: NotificationRule[];
+  // v7+
+  debts: MaterialDebt[];
+  spiritualObligations: SpiritualObligation[];
+  // v8+
+  birthdays: Birthday[];
+  // v9+
+  fontSettings: FontSettings;
 }
 
 // ─── Dashboard ────────────────────────────────────────────────────────────────
@@ -467,6 +478,68 @@ export interface NotificationRule {
   createdAt: string;
 }
 
+// ─── Debt / Obligation types ──────────────────────────────────────────────────
+
+export type DebtType = 'material' | 'spiritual';
+export type MaterialDebtCategory = 'borrowed-money' | 'lent-money' | 'borrowed-item' | 'lent-item';
+export type SpiritualObligationType = 'qaza-namaz' | 'nazr' | 'kaffarah' | 'zakat' | 'khums' | 'other';
+
+export interface MaterialDebt {
+  id: string;
+  direction: 'borrowed' | 'lent'; // borrowed = someone owes ME, lent = I owe someone
+  category: MaterialDebtCategory;
+  amount?: number;
+  itemDescription?: string;
+  personName: string;
+  description?: string;
+  date: string;
+  dueDate?: string;
+  isPaid: boolean;
+  paidDate?: string;
+  notes?: string;
+  createdAt: string;
+}
+
+export interface SpiritualObligation {
+  id: string;
+  type: SpiritualObligationType;
+  title: string;
+  description?: string;
+  quantity?: number;
+  unit?: string;
+  isFulfilled: boolean;
+  fulfilledDate?: string;
+  notes?: string;
+  createdAt: string;
+}
+
+// ─── Birthday types ───────────────────────────────────────────────────────────
+
+export type BirthdayRelation = 'family' | 'friend' | 'colleague' | 'other';
+
+export interface Birthday {
+  id: string;
+  name: string;
+  date: string; // MM-DD (or YYYY-MM-DD if year provided)
+  hasYear: boolean;
+  calendarType: 'jalali' | 'gregorian';
+  relation: BirthdayRelation;
+  notes?: string;
+  reminderDaysBefore: number[]; // e.g. [1, 3, 7]
+  createdAt: string;
+}
+
+// ─── Font settings ────────────────────────────────────────────────────────────
+
+export type PersianFont = 'vazirmatn' | 'iran-sans' | 'sahel' | 'shabnam' | 'estedad';
+export type EnglishFont = 'inter' | 'geist' | 'plus-jakarta-sans';
+
+export interface FontSettings {
+  persianFont: PersianFont;
+  englishFont: EnglishFont;
+  usePersianNumerals: boolean;
+}
+
 // ─── Extended AppState fields ─────────────────────────────────────────────────
 
 // These will be picked up by the migration in storage.ts
@@ -476,3 +549,7 @@ declare module './index' {}
 // timeBlocks: TimeBlock[]
 // journal: { entries: JournalEntry[]; settings: JournalSettings }
 // notificationRules: NotificationRule[]
+// debts: MaterialDebt[]
+// spiritualObligations: SpiritualObligation[]
+// birthdays: Birthday[]
+// fontSettings: FontSettings

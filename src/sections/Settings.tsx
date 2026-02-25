@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Settings,
   Globe,
@@ -11,10 +11,12 @@ import {
   Trash2,
   AlertTriangle,
   X,
+  Type,
 } from 'lucide-react';
 import { useApp } from '@/contexts/AppContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
+import type { PersianFont } from '@/types';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
@@ -36,14 +38,29 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 
+const PERSIAN_FONTS: { id: PersianFont; name: string; family: string; sampleFa: string }[] = [
+  { id: 'vazirmatn', name: 'Vazirmatn', family: "'Vazirmatn', sans-serif", sampleFa: 'نمونه متن فارسی - ۱۲۳۴۵' },
+  { id: 'iran-sans', name: 'Iran Sans', family: "'IRANSans', 'Vazirmatn', sans-serif", sampleFa: 'نمونه متن فارسی - ۱۲۳۴۵' },
+  { id: 'sahel',     name: 'Sahel',     family: "'Sahel', 'Vazirmatn', sans-serif",    sampleFa: 'نمونه متن فارسی - ۱۲۳۴۵' },
+  { id: 'shabnam',   name: 'Shabnam',   family: "'Shabnam', 'Vazirmatn', sans-serif",  sampleFa: 'نمونه متن فارسی - ۱۲۳۴۵' },
+  { id: 'estedad',   name: 'Estedad',   family: "'Estedad', 'Vazirmatn', sans-serif",  sampleFa: 'نمونه متن فارسی - ۱۲۳۴۵' },
+];
+
 export default function SettingsView() {
-  const { settings, updateSettings, exportData, importData, resetData } = useApp();
+  const { settings, updateSettings, exportData, importData, resetData, fontSettings, updateFontSettings } = useApp();
   const { theme, setTheme } = useTheme();
-  const { language, setLanguage, calendar, setCalendar, currency, setCurrency, t } = useLanguage();
-  
+  const { language, setLanguage, calendar, setCalendar, currency, setCurrency, t, isRTL, usePersianNumerals, setUsePersianNumerals } = useLanguage();
+
   const [importJson, setImportJson] = useState('');
   const [isResetDialogOpen, setIsResetDialogOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('general');
+
+  // Apply font class to body whenever fontSettings change
+  useEffect(() => {
+    const body = document.body;
+    PERSIAN_FONTS.forEach(f => body.classList.remove(`font-persian-${f.id}`));
+    body.classList.add(`font-persian-${fontSettings?.persianFont ?? 'vazirmatn'}`);
+  }, [fontSettings?.persianFont]);
 
   const handleExport = () => {
     const data = exportData();
@@ -51,7 +68,7 @@ export default function SettingsView() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `taskflow-backup-${new Date().toISOString().split('T')[0]}.json`;
+    a.download = `life-toolkit-backup-${new Date().toISOString().split('T')[0]}.json`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -191,6 +208,59 @@ export default function SettingsView() {
                     </SelectItem>
                   </SelectContent>
                 </Select>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Font Settings */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base flex items-center gap-2">
+                <Type className="w-4 h-4" />
+                {t('fontSettings')}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <Label className="text-sm font-medium mb-3 block">{t('persianFont')}</Label>
+                <div className="grid grid-cols-2 gap-2 sm:grid-cols-3" dir="rtl">
+                  {PERSIAN_FONTS.map(font => (
+                    <button
+                      key={font.id}
+                      onClick={() => updateFontSettings({ persianFont: font.id })}
+                      className={`p-3 rounded-xl border-2 text-right transition-all hover:border-primary/50 ${
+                        (fontSettings?.persianFont ?? 'vazirmatn') === font.id
+                          ? 'border-primary bg-primary/5'
+                          : 'border-border'
+                      }`}
+                      style={{ fontFamily: font.family }}
+                    >
+                      <div className="text-sm font-semibold">{font.name}</div>
+                      <div className="text-xs text-muted-foreground mt-0.5">{font.sampleFa}</div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between pt-2 border-t border-border/50">
+                <div>
+                  <Label className="text-sm">{t('usePersianNumerals')}</Label>
+                  <p className="text-xs text-muted-foreground mt-0.5">۱ ۲ ۳ ۴ ۵ vs 1 2 3 4 5</p>
+                </div>
+                <button
+                  onClick={() => {
+                    const next = !usePersianNumerals;
+                    setUsePersianNumerals(next);
+                    updateFontSettings({ usePersianNumerals: next });
+                  }}
+                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
+                    usePersianNumerals ? 'bg-primary' : 'bg-input'
+                  }`}
+                >
+                  <span className={`inline-block h-4 w-4 transform rounded-full bg-background shadow-sm transition-transform ${
+                    usePersianNumerals ? 'translate-x-6' : 'translate-x-1'
+                  }`} />
+                </button>
               </div>
             </CardContent>
           </Card>

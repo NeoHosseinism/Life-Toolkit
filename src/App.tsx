@@ -5,6 +5,7 @@ import {
   BookOpen, Target, Clock, Settings, GraduationCap, Sparkles,
   Menu, Sun, Moon, Globe, ChevronLeft, ChevronRight,
   Layers, MessageSquare, PenLine, Timer, Bell, Brain,
+  HandCoins, Cake,
 } from 'lucide-react';
 import { ThemeProvider, useTheme } from '@/contexts/ThemeContext';
 import { LanguageProvider, useLanguage } from '@/contexts/LanguageContext';
@@ -31,13 +32,16 @@ import Journal from '@/sections/Journal';
 import TimeBlocking from '@/sections/TimeBlocking';
 import NotificationsManager from '@/sections/NotificationsManager';
 import Psychology from '@/sections/Psychology';
+import Debts from '@/sections/Debts';
+import Birthdays from '@/sections/Birthdays';
 import './App.css';
 
 type ViewType =
   | 'dashboard' | 'tasks' | 'calendar' | 'health' | 'money'
   | 'learning' | 'habits' | 'goals' | 'pomodoro' | 'meditation'
   | 'planning' | 'prompts' | 'journal' | 'timeblocking' | 'notifications'
-  | 'psychology' | 'settings';
+  | 'psychology' | 'settings'
+  | 'debts' | 'birthdays';
 
 interface NavItemDef { id: ViewType; icon: React.ElementType; group?: string; }
 
@@ -67,6 +71,13 @@ const navGroups: { label: string; items: NavItemDef[] }[] = [
       { id: 'meditation',    icon: BookOpen },
       { id: 'journal',       icon: PenLine },
       { id: 'psychology',    icon: Brain },
+    ],
+  },
+  {
+    label: 'Life',
+    items: [
+      { id: 'debts',         icon: HandCoins },
+      { id: 'birthdays',     icon: Cake },
     ],
   },
   {
@@ -105,6 +116,8 @@ function renderView(view: ViewType) {
     case 'notifications':return <NotificationsManager />;
     case 'psychology':   return <Psychology />;
     case 'settings':     return <SettingsView />;
+    case 'debts':        return <Debts />;
+    case 'birthdays':    return <Birthdays />;
     default:             return <Dashboard />;
   }
 }
@@ -144,8 +157,8 @@ function AppContent() {
           <CheckSquare className="w-4 h-4 text-primary-foreground" />
         </div>
         {!compact && (
-          <span className="text-base font-bold truncate leading-tight">
-            Self<br />Monitor
+          <span className="text-sm font-bold truncate leading-tight">
+            Life‑Toolkit
           </span>
         )}
       </div>

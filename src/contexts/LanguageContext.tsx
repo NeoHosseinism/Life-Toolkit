@@ -13,7 +13,7 @@ interface Translations {
 
 const translations: Record<Language, Translations> = {
   en: {
-    appName: 'TaskFlow',
+    appName: 'Life-Toolkit',
     dashboard: 'Dashboard',
     tasks: 'Tasks',
     calendar: 'Calendar',
@@ -176,9 +176,41 @@ const translations: Record<Language, Translations> = {
     average: 'Average',
     maximum: 'Maximum',
     minimum: 'Minimum',
+    // Debts & Obligations
+    debts: 'Debts & Obligations',
+    birthdays: 'Birthdays',
+    materialDebts: 'Material Debts',
+    spiritualObligations: 'Spiritual Obligations',
+    borrowed: 'Borrowed',
+    lent: 'Lent',
+    qazaNamaz: 'Missed Prayers',
+    nazr: 'Vow (Nazr)',
+    kaffarah: 'Kaffarah',
+    zakat: 'Zakat',
+    khums: 'Khums',
+    isPaid: 'Paid',
+    isUnpaid: 'Unpaid',
+    isFulfilled: 'Fulfilled',
+    personName: 'Person Name',
+    addDebt: 'Add Debt',
+    addObligation: 'Add Obligation',
+    addBirthday: 'Add Birthday',
+    upcomingBirthdays: 'Upcoming Birthdays',
+    daysUntilBirthday: 'days until birthday',
+    relation: 'Relation',
+    family: 'Family',
+    friend: 'Friend',
+    colleague: 'Colleague',
+    reminderDays: 'Remind me',
+    // Font settings
+    fontSettings: 'Font Settings',
+    persianFont: 'Persian Font',
+    englishFont: 'English Font',
+    usePersianNumerals: 'Use Persian Numerals (۱۲۳)',
+    appearance: 'Appearance',
   },
   fa: {
-    appName: 'تسک‌فلو',
+    appName: 'جعبه‌ابزار زندگی',
     dashboard: 'داشبورد',
     tasks: 'وظایف',
     calendar: 'تقویم',
@@ -341,6 +373,38 @@ const translations: Record<Language, Translations> = {
     average: 'میانگین',
     maximum: 'حداکثر',
     minimum: 'حداقل',
+    // Debts & Obligations
+    debts: 'دین‌ها و بدهکاری‌ها',
+    birthdays: 'تولدها',
+    materialDebts: 'بدهی‌های مادی',
+    spiritualObligations: 'تکالیف معنوی',
+    borrowed: 'قرض گرفته',
+    lent: 'قرض داده',
+    qazaNamaz: 'قضا نماز',
+    nazr: 'نذر',
+    kaffarah: 'کفاره',
+    zakat: 'زکات',
+    khums: 'خمس',
+    isPaid: 'پرداخت شده',
+    isUnpaid: 'پرداخت نشده',
+    isFulfilled: 'ادا شده',
+    personName: 'نام شخص',
+    addDebt: 'افزودن بدهی',
+    addObligation: 'افزودن تکلیف',
+    addBirthday: 'افزودن تولد',
+    upcomingBirthdays: 'تولدهای پیش رو',
+    daysUntilBirthday: 'روز تا تولد',
+    relation: 'رابطه',
+    family: 'خانواده',
+    friend: 'دوست',
+    colleague: 'همکار',
+    reminderDays: 'یادآوری',
+    // Font settings
+    fontSettings: 'تنظیمات فونت',
+    persianFont: 'فونت فارسی',
+    englishFont: 'فونت انگلیسی',
+    usePersianNumerals: 'استفاده از اعداد فارسی (۱۲۳)',
+    appearance: 'ظاهر',
   },
 };
 
@@ -356,6 +420,8 @@ interface LanguageContextType {
   setCurrency: (cur: CurrencyType) => void;
   formatNumber: (num: number) => string;
   formatCurrency: (amount: number) => string;
+  usePersianNumerals: boolean;
+  setUsePersianNumerals: (v: boolean) => void;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -364,17 +430,20 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguageState] = useState<Language>('en');
   const [calendar, setCalendarState] = useState<CalendarType>('gregorian');
   const [currency, setCurrencyState] = useState<CurrencyType>('toman');
-  
+  const [usePersianNumerals, setUsePersianNumeralsState] = useState(false);
+
   const isRTL = language === 'fa';
 
   useEffect(() => {
     const savedLang = localStorage.getItem('language') as Language;
     const savedCal = localStorage.getItem('calendar') as CalendarType;
     const savedCur = localStorage.getItem('currency') as CurrencyType;
-    
+    const savedPersianNum = localStorage.getItem('usePersianNumerals');
+
     if (savedLang) setLanguageState(savedLang);
     if (savedCal) setCalendarState(savedCal);
     if (savedCur) setCurrencyState(savedCur);
+    if (savedPersianNum !== null) setUsePersianNumeralsState(savedPersianNum === 'true');
   }, []);
 
   useEffect(() => {
@@ -402,6 +471,11 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem('currency', cur);
   };
 
+  const setUsePersianNumerals = (v: boolean) => {
+    setUsePersianNumeralsState(v);
+    localStorage.setItem('usePersianNumerals', String(v));
+  };
+
   const t = useCallback((key: string): string => {
     const keys = key.split('.');
     let value: unknown = translations[language];
@@ -418,9 +492,10 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   }, [language]);
 
   const toPersianNum = useCallback((num: number | string): string => {
-    if (language !== 'fa') return String(num);
+    if (!usePersianNumerals && language !== 'fa') return String(num);
+    if (language !== 'fa' && !usePersianNumerals) return String(num);
     return String(num).replace(/\d/g, (d) => persianNumerals[d] || d);
-  }, [language]);
+  }, [language, usePersianNumerals]);
 
   const formatNumber = useCallback((num: number): string => {
     const formatted = new Intl.NumberFormat(language === 'fa' ? 'fa-IR' : 'en-US').format(num);
@@ -447,6 +522,8 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
       setCurrency,
       formatNumber,
       formatCurrency,
+      usePersianNumerals,
+      setUsePersianNumerals,
     }}>
       {children}
     </LanguageContext.Provider>

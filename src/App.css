@@ -13,8 +13,13 @@
   --tw-space-x-reverse: 1;
 }
 
-/* Glass morphism enhancements */
+/* Glass morphism — enhanced */
 .glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px) saturate(150%);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
   position: relative;
 }
 
@@ -24,8 +29,8 @@
   inset: 0;
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.1) 0%,
-    rgba(255, 255, 255, 0.05) 100%
+    rgba(255, 255, 255, 0.10) 0%,
+    rgba(255, 255, 255, 0.04) 100%
   );
   pointer-events: none;
   border-radius: inherit;
@@ -34,9 +39,29 @@
 .dark .glass::before {
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.05) 0%,
-    rgba(255, 255, 255, 0.02) 100%
+    rgba(255, 255, 255, 0.04) 0%,
+    rgba(255, 255, 255, 0.01) 100%
   );
+}
+
+/* Sidebar glass treatment */
+aside.lg\:flex {
+  background: var(--glass-bg-strong, var(--glass-bg));
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+}
+
+/* Active nav item: subtle gradient instead of solid */
+.nav-item-active {
+  background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary) / 0.8));
+}
+
+/* Micro-interactions */
+button, [role="button"] {
+  transition: transform 0.1s ease, opacity 0.1s ease;
+}
+button:active:not(:disabled) {
+  transform: scale(0.97);
 }
 
 /* Card hover effects */

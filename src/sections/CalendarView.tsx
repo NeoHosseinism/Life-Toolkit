@@ -87,22 +87,25 @@ export default function CalendarView() {
     }
   };
 
+  // For Jalali RTL: header days and grid must share the same direction
+  const gridDir = calendar === 'jalali' ? 'rtl' : 'ltr';
+
   const MonthView = () => (
     <div className="space-y-4">
       {/* Week Days Header */}
-      <div className="grid grid-cols-7 gap-1">
+      <div className="grid grid-cols-7 gap-1" dir={gridDir}>
         {weekDays.map((day, index) => (
           <div
             key={index}
-            className="text-center text-sm font-medium text-muted-foreground py-2"
+            className="text-center text-xs sm:text-sm font-medium text-muted-foreground py-2"
           >
-            {calendar === 'jalali' ? day : day}
+            {day}
           </div>
         ))}
       </div>
 
       {/* Calendar Grid */}
-      <div className="grid grid-cols-7 gap-1">
+      <div className="grid grid-cols-7 gap-1" dir={gridDir}>
         {calendarDays.map((date, index) => {
           const isCurrentMonth = isSameCalendarMonth(date, currentDate, calendar);
           const isToday = isCalendarToday(date, calendar);
@@ -232,20 +235,21 @@ export default function CalendarView() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
+            {/* In RTL the "previous" arrow points right, "next" points left */}
             <Button variant="outline" size="icon" onClick={navigatePrevious}>
-              <ChevronLeft className="w-4 h-4" />
+              {isRTL ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
             </Button>
             <Button variant="outline" onClick={navigateToday}>
               {t('today')}
             </Button>
             <Button variant="outline" size="icon" onClick={navigateNext}>
-              <ChevronRight className="w-4 h-4" />
+              {isRTL ? <ChevronLeft className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
             </Button>
           </div>
-          <h2 className="text-xl font-bold">
+          <h2 className="text-xl font-bold" dir={calendar === 'jalali' ? 'rtl' : 'ltr'}>
             {calendar === 'jalali'
-              ? `${toPersianNum(year)} ${['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'][month - 1]}`
-              : `${['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'][month - 1]} ${year}`}
+              ? `${['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'][month - 1]} ${toPersianNum(year)}`
+              : `${['January','February','March','April','May','June','July','August','September','October','November','December'][month - 1]} ${year}`}
           </h2>
         </div>
 
