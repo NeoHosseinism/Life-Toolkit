@@ -263,7 +263,7 @@ export default function Tasks() {
   );
 
   const KanbanView = () => (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       {columns.map(column => {
         const columnTasks = filteredTasks.filter(t => t.status === column.id);
         return (
@@ -365,7 +365,7 @@ export default function Tasks() {
               placeholder={t('search')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className={`${isRTL ? 'pr-9' : 'pl-9'} ${searchQuery ? (isRTL ? 'pl-8' : 'pr-8') : ''} w-48`}
+              className={`${isRTL ? 'pr-9' : 'pl-9'} ${searchQuery ? (isRTL ? 'pl-8' : 'pr-8') : ''} w-full sm:w-48`}
             />
             {searchQuery && (
               <button

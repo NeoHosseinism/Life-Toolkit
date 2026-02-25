@@ -95,7 +95,7 @@ export default function CalendarView() {
   const MonthView = () => (
     <div className="space-y-4">
       {/* Week Days Header */}
-      <div className="grid grid-cols-7 gap-1" dir={gridDir}>
+      <div className="grid grid-cols-7 gap-0.5 sm:gap-1" dir={gridDir}>
         {weekDays.map((day, index) => (
           <div
             key={index}
@@ -107,7 +107,7 @@ export default function CalendarView() {
       </div>
 
       {/* Calendar Grid */}
-      <div className="grid grid-cols-7 gap-1" dir={gridDir}>
+      <div className="grid grid-cols-7 gap-0.5 sm:gap-1" dir={gridDir}>
         {calendarDays.map((date, index) => {
           const isCurrentMonth = isSameCalendarMonth(date, currentDate, calendar);
           const isToday = isCalendarToday(date, calendar);
@@ -248,7 +248,7 @@ export default function CalendarView() {
               {isRTL ? <ChevronLeft className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
             </Button>
           </div>
-          <h2 className="text-xl font-bold" dir={calendar === 'jalali' && language === 'fa' ? 'rtl' : 'ltr'}>
+          <h2 className="text-base sm:text-xl font-bold" dir={calendar === 'jalali' && language === 'fa' ? 'rtl' : 'ltr'}>
             {calendar === 'jalali'
               ? language === 'en'
                 ? `${jalaliMonthsEn[month - 1]} ${year}`

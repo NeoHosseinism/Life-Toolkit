@@ -212,7 +212,7 @@ export default function Goals() {
               <CardContent className="p-4">
                 <div className="flex items-start gap-4">
                   {/* Progress indicator */}
-                  <div className="relative w-16 h-16 flex-shrink-0">
+                  <div className="relative w-12 h-12 sm:w-16 sm:h-16 flex-shrink-0">
                     <svg className="w-full h-full -rotate-90">
                       <circle
                         cx="32"

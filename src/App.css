@@ -363,12 +363,6 @@ html {
   display: none;
 }
 
-/* Responsive typography */
-@media (max-width: 640px) {
-  html {
-    font-size: 14px;
-  }
-}
 
 /* Print styles */
 @media print {
@@ -414,8 +408,8 @@ body,
 
   /* Give chart containers a sensible mobile height */
   .recharts-responsive-container {
-    height: 200px !important;
-    max-height: 200px !important;
+    height: min(200px, 30vh) !important;
+    max-height: min(200px, 30vh) !important;
   }
 
 }

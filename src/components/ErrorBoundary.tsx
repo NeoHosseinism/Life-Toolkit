@@ -32,7 +32,7 @@ export default class ErrorBoundary extends Component<Props, State> {
     if (this.state.hasError) {
       if (this.props.fallback) return this.props.fallback;
       return (
-        <div className="flex flex-col items-center justify-center p-12 gap-4 text-muted-foreground">
+        <div className="flex flex-col items-center justify-center p-4 sm:p-8 md:p-12 gap-4 text-muted-foreground">
           <AlertTriangle className="w-10 h-10 text-destructive opacity-60" />
           <p className="text-sm font-medium text-center">Something went wrong in this section.</p>
           {this.state.error && (

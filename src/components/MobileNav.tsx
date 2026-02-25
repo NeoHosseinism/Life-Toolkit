@@ -61,7 +61,7 @@ export default function MobileNav({ currentView, onNavigate, onAddAction }: Mobi
                 `}
               >
                 <Icon className={`w-5 h-5 ${isActive ? 'scale-110' : ''} transition-transform`} />
-                <span className="text-[10px] font-medium">{t(item.id) || item.label}</span>
+                <span className="text-[11px] font-medium">{t(item.id) || item.label}</span>
               </button>
             );
           })}
@@ -74,7 +74,7 @@ export default function MobileNav({ currentView, onNavigate, onAddAction }: Mobi
             <div className="w-11 h-11 rounded-full bg-primary flex items-center justify-center shadow-lg shadow-primary/30 -mt-5">
               <Plus className="w-6 h-6 text-primary-foreground" />
             </div>
-            <span className="text-[10px] font-medium text-muted-foreground">Add</span>
+            <span className="text-[11px] font-medium text-muted-foreground">Add</span>
           </button>
 
           {/* More button (triggers drawer) */}
@@ -82,12 +82,12 @@ export default function MobileNav({ currentView, onNavigate, onAddAction }: Mobi
             <SheetTrigger asChild>
               <button className="flex flex-col items-center justify-center gap-1 flex-1 h-12 max-w-[64px] text-muted-foreground hover:text-foreground">
                 <Menu className="w-5 h-5" />
-                <span className="text-[10px] font-medium">More</span>
+                <span className="text-[11px] font-medium">More</span>
               </button>
             </SheetTrigger>
             <SheetContent 
               side={isRTL ? 'right' : 'left'} 
-              className="w-72 p-0 bg-background"
+              className="w-3/4 sm:w-72 p-0 bg-background"
             >
               <div className="flex flex-col h-full py-4">
                 <div className="px-4 pb-4 border-b">
@@ -116,7 +116,7 @@ export default function MobileNav({ currentView, onNavigate, onAddAction }: Mobi
                           `}
                         >
                           <Icon className="w-5 h-5" />
-                          <span className="font-medium capitalize">
+                          <span className="font-medium">
                             {t(item.id) || item.label}
                           </span>
                         </button>
@@ -155,7 +155,7 @@ export default function MobileNav({ currentView, onNavigate, onAddAction }: Mobi
                           `}
                         >
                           <Icon className="w-5 h-5" />
-                          <span className="font-medium capitalize">
+                          <span className="font-medium">
                             {t(item.id) || item.label}
                           </span>
                         </button>
@@ -191,7 +191,7 @@ export default function MobileNav({ currentView, onNavigate, onAddAction }: Mobi
                           `}
                         >
                           <Icon className="w-5 h-5" />
-                          <span className="font-medium capitalize">
+                          <span className="font-medium">
                             {t(item.id) || item.label}
                           </span>
                         </button>

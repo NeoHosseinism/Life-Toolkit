@@ -169,7 +169,7 @@ export default function Meditation() {
             </div>
 
             {/* Duration Selector */}
-            <div className="flex justify-center gap-2 mb-8">
+            <div className="flex flex-wrap justify-center gap-1.5 sm:gap-2 mb-8">
               {durationOptions.map((duration) => (
                 <Button
                   key={duration}

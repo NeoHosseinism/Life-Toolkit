@@ -501,7 +501,7 @@ export default function Planning() {
           { label: 'Reviews', value: reviews.filter((r) => r.completedAt).length, icon: ClipboardList, color: 'text-primary' },
         ].map(({ label, value, icon: Icon, color }) => (
           <Card key={label} className="border-border/50">
-            <CardContent className="p-4 flex items-center gap-3">
+            <CardContent className="p-4 flex items-center gap-2 sm:gap-3">
               <Icon className={`w-5 h-5 ${color}`} />
               <div>
                 <p className="text-xl font-bold">{value}</p>

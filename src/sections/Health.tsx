@@ -298,7 +298,7 @@ export default function Health() {
               <CardTitle className="text-base">{t('weekly')} {t('activity')}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="h-64">
+              <div className="h-48 sm:h-56 lg:h-64">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={exerciseChartData}>
                     <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
@@ -432,7 +432,7 @@ export default function Health() {
               <CardTitle className="text-base">{t('weekly')} {t('sleep')}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="h-64">
+              <div className="h-48 sm:h-56 lg:h-64">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={sleepChartData}>
                     <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />

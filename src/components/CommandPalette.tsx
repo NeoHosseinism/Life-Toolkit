@@ -84,7 +84,7 @@ export default function CommandPalette({ open, setOpen, onNavigate }: CommandPal
           className="flex h-11 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
         />
       </div>
-      <CommandList className="max-h-[400px] overflow-y-auto p-2">
+      <CommandList className="max-h-[min(400px,60vh)] overflow-y-auto p-2">
         <CommandEmpty>{t('noResults') || 'No results found.'}</CommandEmpty>
 
         {/* Navigation Group */}
