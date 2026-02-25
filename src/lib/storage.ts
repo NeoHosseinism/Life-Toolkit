@@ -17,7 +17,7 @@ import type { AppState } from '@/types';
 // ─────────────────────────────────────────────────────────────────────────────
 // Schema version — bump this whenever AppState shape changes
 // ─────────────────────────────────────────────────────────────────────────────
-export const CURRENT_SCHEMA_VERSION = 3;
+export const CURRENT_SCHEMA_VERSION = 9;
 
 const STORAGE_KEY = 'selfmonitor-data';
 const VERSION_KEY = 'selfmonitor-schema-version';

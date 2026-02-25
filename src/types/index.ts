@@ -360,7 +360,7 @@ export interface AppState {
   meditations: MeditationSession[];
   pomodoroSessions: PomodoroSession[];
   settings: UserSettings;
-  // New sections (added via migrations)
+  // Planning & Prompt Library
   planning: PlanningState;
   promptLibrary: PromptLibraryState;
   // v4+

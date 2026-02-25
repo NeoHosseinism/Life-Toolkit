@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   LayoutDashboard, CheckSquare, Calendar, Heart, Wallet,
   BookOpen, Target, Clock, Settings, GraduationCap, Sparkles,
   Menu, Sun, Moon, Globe, ChevronLeft, ChevronRight,
-  Layers, MessageSquare, PenLine, Timer, Bell, Brain,
-  HandCoins, Cake,
+  Layers, MessageSquare, PenLine, Timer, Bell, Brain, Search,
+  Star, ChevronDown, HandCoins, Cake,
 } from 'lucide-react';
 import { ThemeProvider, useTheme } from '@/contexts/ThemeContext';
 import { LanguageProvider, useLanguage } from '@/contexts/LanguageContext';
@@ -13,35 +13,57 @@ import { AppProvider, useApp } from '@/contexts/AppContext';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { startNotificationScheduler, updateSchedulerRules } from '@/lib/notifications';
+import { startNotificationScheduler } from '@/lib/notifications';
+import { Skeleton } from '@/components/ui/skeleton';
+import CommandPalette, { CommandPaletteHint } from '@/components/CommandPalette';
+import MobileNav from '@/components/MobileNav';
 
-import Dashboard from '@/sections/Dashboard';
-import Tasks from '@/sections/Tasks';
-import CalendarView from '@/sections/CalendarView';
-import Health from '@/sections/Health';
-import Money from '@/sections/Money';
-import Learning from '@/sections/Learning';
-import Habits from '@/sections/Habits';
-import Goals from '@/sections/Goals';
-import Pomodoro from '@/sections/Pomodoro';
-import Meditation from '@/sections/Meditation';
-import SettingsView from '@/sections/Settings';
-import Planning from '@/sections/Planning';
-import PromptLibrary from '@/sections/PromptLibrary';
-import Journal from '@/sections/Journal';
-import TimeBlocking from '@/sections/TimeBlocking';
-import NotificationsManager from '@/sections/NotificationsManager';
-import Psychology from '@/sections/Psychology';
-import Debts from '@/sections/Debts';
-import Birthdays from '@/sections/Birthdays';
 import './App.css';
+
+// Lazy load all sections for code splitting
+const Dashboard = lazy(() => import('@/sections/Dashboard'));
+const Tasks = lazy(() => import('@/sections/Tasks'));
+const CalendarView = lazy(() => import('@/sections/CalendarView'));
+const Health = lazy(() => import('@/sections/Health'));
+const Money = lazy(() => import('@/sections/Money'));
+const Learning = lazy(() => import('@/sections/Learning'));
+const Habits = lazy(() => import('@/sections/Habits'));
+const Goals = lazy(() => import('@/sections/Goals'));
+const Pomodoro = lazy(() => import('@/sections/Pomodoro'));
+const Meditation = lazy(() => import('@/sections/Meditation'));
+const SettingsView = lazy(() => import('@/sections/Settings'));
+const Planning = lazy(() => import('@/sections/Planning'));
+const PromptLibrary = lazy(() => import('@/sections/PromptLibrary'));
+const Journal = lazy(() => import('@/sections/Journal'));
+const TimeBlocking = lazy(() => import('@/sections/TimeBlocking'));
+const NotificationsManager = lazy(() => import('@/sections/NotificationsManager'));
+const Psychology = lazy(() => import('@/sections/Psychology'));
+const Debts = lazy(() => import('@/sections/Debts'));
+const Birthdays = lazy(() => import('@/sections/Birthdays'));
+
+// Loading skeleton component
+function SectionLoader() {
+  return (
+    <div className="space-y-6 p-4">
+      <div className="flex items-center justify-between">
+        <Skeleton className="h-8 w-48" />
+        <Skeleton className="h-8 w-24" />
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {[1, 2, 3, 4, 5, 6].map((i) => (
+          <Skeleton key={i} className="h-32 w-full" />
+        ))}
+      </div>
+      <Skeleton className="h-64 w-full" />
+    </div>
+  );
+}
 
 type ViewType =
   | 'dashboard' | 'tasks' | 'calendar' | 'health' | 'money'
   | 'learning' | 'habits' | 'goals' | 'pomodoro' | 'meditation'
   | 'planning' | 'prompts' | 'journal' | 'timeblocking' | 'notifications'
-  | 'psychology' | 'settings'
-  | 'debts' | 'birthdays';
+  | 'psychology' | 'settings' | 'debts' | 'birthdays';
 
 interface NavItemDef { id: ViewType; icon: React.ElementType; group?: string; }
 
@@ -97,29 +119,36 @@ const navGroups: { label: string; items: NavItemDef[] }[] = [
   },
 ];
 
+const sectionMap: Record<ViewType, React.LazyExoticComponent<() => React.JSX.Element>> = {
+  dashboard: Dashboard,
+  tasks: Tasks,
+  calendar: CalendarView,
+  health: Health,
+  money: Money,
+  learning: Learning,
+  habits: Habits,
+  goals: Goals,
+  pomodoro: Pomodoro,
+  meditation: Meditation,
+  planning: Planning,
+  prompts: PromptLibrary,
+  journal: Journal,
+  timeblocking: TimeBlocking,
+  notifications: NotificationsManager,
+  psychology: Psychology,
+  debts: Debts,
+  birthdays: Birthdays,
+  settings: SettingsView,
+};
+
 function renderView(view: ViewType) {
-  switch (view) {
-    case 'dashboard':    return <Dashboard />;
-    case 'tasks':        return <Tasks />;
-    case 'calendar':     return <CalendarView />;
-    case 'health':       return <Health />;
-    case 'money':        return <Money />;
-    case 'learning':     return <Learning />;
-    case 'habits':       return <Habits />;
-    case 'goals':        return <Goals />;
-    case 'pomodoro':     return <Pomodoro />;
-    case 'meditation':   return <Meditation />;
-    case 'planning':     return <Planning />;
-    case 'prompts':      return <PromptLibrary />;
-    case 'journal':      return <Journal />;
-    case 'timeblocking': return <TimeBlocking />;
-    case 'notifications':return <NotificationsManager />;
-    case 'psychology':   return <Psychology />;
-    case 'settings':     return <SettingsView />;
-    case 'debts':        return <Debts />;
-    case 'birthdays':    return <Birthdays />;
-    default:             return <Dashboard />;
-  }
+  const Section = sectionMap[view];
+
+  return (
+    <Suspense fallback={<SectionLoader />}>
+      <Section />
+    </Suspense>
+  );
 }
 
 // ─── Start notification scheduler once on app boot ────────────────────────────
@@ -140,6 +169,19 @@ function AppContent() {
   const [currentView, setCurrentView] = useState<ViewType>('dashboard');
   const [mobileOpen, setMobileOpen]   = useState(false);
   const [collapsed, setCollapsed]     = useState(false);
+  const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
+  const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({});
+  const [favorites, setFavorites] = useState<ViewType[]>(['dashboard', 'tasks', 'calendar']);
+
+  const toggleGroup = (groupLabel: string) => {
+    setCollapsedGroups(prev => ({ ...prev, [groupLabel]: !prev[groupLabel] }));
+  };
+
+  const toggleFavorite = (id: ViewType) => {
+    setFavorites(prev => 
+      prev.includes(id) ? prev.filter(f => f !== id) : [...prev, id]
+    );
+  };
 
   const { isDark, toggleTheme }               = useTheme();
   const { language, isRTL, setLanguage, t }   = useLanguage();
@@ -157,25 +199,71 @@ function AppContent() {
           <CheckSquare className="w-4 h-4 text-primary-foreground" />
         </div>
         {!compact && (
-          <span className="text-sm font-bold truncate leading-tight">
-            Life‑Toolkit
+          <span className="text-base font-bold truncate leading-tight">
+            {language === 'fa' ? 'جعبه‌ابزار' : 'Life'}<br />
+            {language === 'fa' ? 'زندگی' : 'Toolkit'}
           </span>
         )}
       </div>
 
       {/* Nav */}
       <nav className={`flex-1 overflow-y-auto py-3 ${compact ? 'px-2' : 'px-3'} space-y-0.5 custom-scrollbar`}>
+        {/* Favorites Section */}
+        {!compact && favorites.length > 0 && (
+          <div className="mb-3">
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/40 px-3 mb-1 flex items-center gap-1">
+              <Star className="w-3 h-3" />
+              {t('favorites') || 'Favorites'}
+            </p>
+            {favorites.map((favId) => {
+              const favItem = navGroups.flatMap(g => g.items).find(i => i.id === favId);
+              if (!favItem) return null;
+              const Icon = favItem.icon;
+              const isActive = currentView === favItem.id;
+              return (
+                <button
+                  key={favItem.id}
+                  onClick={() => navigate(favItem.id)}
+                  className={`
+                    group w-full flex items-center rounded-xl transition-all duration-150 font-medium gap-3 px-3 py-2.5
+                    ${isActive
+                      ? 'bg-primary text-primary-foreground shadow-md shadow-primary/20'
+                      : 'text-muted-foreground hover:bg-muted/70 hover:text-foreground'
+                    }
+                  `}
+                >
+                  <Icon className={`shrink-0 w-[17px] h-[17px] ${isActive ? '' : 'group-hover:scale-110 transition-transform'}`} />
+                  <span className="flex-1 text-sm text-start capitalize">{t(favItem.id) || favItem.id.replace(/([A-Z])/g, ' $1').trim()}</span>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); toggleFavorite(favItem.id); }}
+                    className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-muted rounded"
+                  >
+                    <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                  </button>
+                </button>
+              );
+            })}
+          </div>
+        )}
+
         {navGroups.map((group) => (
           <div key={group.label} className="mb-3">
             {group.label && !compact && (
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/40 px-3 mb-1">
-                {group.label}
-              </p>
+              <button
+                onClick={() => toggleGroup(group.label)}
+                className="w-full flex items-center justify-between px-3 mb-1 group"
+              >
+                <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/40">
+                  {group.label}
+                </p>
+                <ChevronDown className={`w-3 h-3 text-muted-foreground/40 transition-transform ${collapsedGroups[group.label] ? '-rotate-90' : ''}`} />
+              </button>
             )}
-            {group.items.map((item) => {
+            {(!collapsedGroups[group.label] || compact) && group.items.map((item) => {
               const Icon     = item.icon;
               const isActive = currentView === item.id;
               const badge    = item.id === 'tasks' && stats.pendingTasks > 0 ? stats.pendingTasks : null;
+              const isFavorite = favorites.includes(item.id);
 
               const btn = (
                 <button
@@ -194,11 +282,24 @@ function AppContent() {
                   {!compact && (
                     <>
                       <span className="flex-1 text-sm text-start capitalize">{t(item.id) || item.id.replace(/([A-Z])/g, ' $1').trim()}</span>
-                      {badge && (
-                        <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold ${isActive ? 'bg-primary-foreground/20' : 'bg-primary/10 text-primary'}`}>
-                          {badge}
-                        </span>
-                      )}
+                      <div className="flex items-center gap-1">
+                        {!isFavorite && (
+                          <button
+                            onClick={(e) => { e.stopPropagation(); toggleFavorite(item.id); }}
+                            className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-muted rounded"
+                          >
+                            <Star className="w-3 h-3" />
+                          </button>
+                        )}
+                        {isFavorite && (
+                          <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                        )}
+                        {badge && (
+                          <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold ${isActive ? 'bg-primary-foreground/20' : 'bg-primary/10 text-primary'}`}>
+                            {badge}
+                          </span>
+                        )}
+                      </div>
                     </>
                   )}
                 </button>
@@ -290,6 +391,15 @@ function AppContent() {
               </h1>
             </div>
             <div className="flex items-center gap-1 shrink-0">
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={() => setCommandPaletteOpen(true)}
+                className="hidden md:flex"
+                title="Search (Cmd+K)"
+              >
+                <Search className="w-4 h-4" />
+              </Button>
               <Button variant="ghost" size="icon" onClick={toggleTheme} className="hidden sm:flex">
                 {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
               </Button>
@@ -300,7 +410,7 @@ function AppContent() {
           </header>
 
           {/* Content */}
-          <main className="flex-1 overflow-auto p-4 sm:p-6 lg:p-8">
+          <main className="flex-1 overflow-auto p-4 sm:p-6 lg:p-8 pb-24 lg:pb-8">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentView}
@@ -315,6 +425,25 @@ function AppContent() {
           </main>
         </div>
       </TooltipProvider>
+      
+      {/* Command Palette */}
+      <CommandPalette 
+        open={commandPaletteOpen} 
+        setOpen={setCommandPaletteOpen} 
+        onNavigate={(view) => {
+          setCurrentView(view);
+          setMobileOpen(false);
+        }}
+      />
+      
+      {/* Mobile Bottom Navigation */}
+      <MobileNav 
+        currentView={currentView} 
+        onNavigate={(view) => {
+          setCurrentView(view);
+          setMobileOpen(false);
+        }}
+      />
     </div>
   );
 }

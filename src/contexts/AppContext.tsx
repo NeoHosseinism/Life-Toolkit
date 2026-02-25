@@ -166,6 +166,21 @@ interface AppContextType extends AppState {
   // Pomodoro operations
   addPomodoroSession: (session: Omit<PomodoroSession, 'id'>) => void;
   
+  // Material Debt operations
+  addMaterialDebt: (debt: Omit<MaterialDebt, 'id' | 'createdAt'>) => void;
+  updateMaterialDebt: (id: string, updates: Partial<MaterialDebt>) => void;
+  deleteMaterialDebt: (id: string) => void;
+  
+  // Spiritual Obligation operations
+  addSpiritualObligation: (obligation: Omit<SpiritualObligation, 'id' | 'createdAt'>) => void;
+  updateSpiritualObligation: (id: string, updates: Partial<SpiritualObligation>) => void;
+  deleteSpiritualObligation: (id: string) => void;
+  
+  // Birthday operations
+  addBirthday: (birthday: Omit<Birthday, 'id' | 'createdAt'>) => void;
+  updateBirthday: (id: string, updates: Partial<Birthday>) => void;
+  deleteBirthday: (id: string) => void;
+  
   // Settings
   updateSettings: (settings: Partial<UserSettings>) => void;
   
@@ -608,6 +623,78 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }));
   }, []);
 
+  // Material Debt operations
+  const addMaterialDebt = useCallback((debt: Omit<MaterialDebt, 'id' | 'createdAt'>) => {
+    const newDebt: MaterialDebt = {
+      ...debt,
+      id: uuidv4(),
+      createdAt: new Date().toISOString(),
+    };
+    setState(prev => ({ ...prev, materialDebts: [...prev.materialDebts, newDebt] }));
+  }, []);
+
+  const updateMaterialDebt = useCallback((id: string, updates: Partial<MaterialDebt>) => {
+    setState(prev => ({
+      ...prev,
+      materialDebts: prev.materialDebts.map(d => (d.id === id ? { ...d, ...updates } : d)),
+    }));
+  }, []);
+
+  const deleteMaterialDebt = useCallback((id: string) => {
+    setState(prev => ({
+      ...prev,
+      materialDebts: prev.materialDebts.filter(d => d.id !== id),
+    }));
+  }, []);
+
+  // Spiritual Obligation operations
+  const addSpiritualObligation = useCallback((obligation: Omit<SpiritualObligation, 'id' | 'createdAt'>) => {
+    const newObligation: SpiritualObligation = {
+      ...obligation,
+      id: uuidv4(),
+      createdAt: new Date().toISOString(),
+    };
+    setState(prev => ({ ...prev, spiritualObligations: [...prev.spiritualObligations, newObligation] }));
+  }, []);
+
+  const updateSpiritualObligation = useCallback((id: string, updates: Partial<SpiritualObligation>) => {
+    setState(prev => ({
+      ...prev,
+      spiritualObligations: prev.spiritualObligations.map(o => (o.id === id ? { ...o, ...updates } : o)),
+    }));
+  }, []);
+
+  const deleteSpiritualObligation = useCallback((id: string) => {
+    setState(prev => ({
+      ...prev,
+      spiritualObligations: prev.spiritualObligations.filter(o => o.id !== id),
+    }));
+  }, []);
+
+  // Birthday operations
+  const addBirthday = useCallback((birthday: Omit<Birthday, 'id' | 'createdAt'>) => {
+    const newBirthday: Birthday = {
+      ...birthday,
+      id: uuidv4(),
+      createdAt: new Date().toISOString(),
+    };
+    setState(prev => ({ ...prev, birthdays: [...prev.birthdays, newBirthday] }));
+  }, []);
+
+  const updateBirthday = useCallback((id: string, updates: Partial<Birthday>) => {
+    setState(prev => ({
+      ...prev,
+      birthdays: prev.birthdays.map(b => (b.id === id ? { ...b, ...updates } : b)),
+    }));
+  }, []);
+
+  const deleteBirthday = useCallback((id: string) => {
+    setState(prev => ({
+      ...prev,
+      birthdays: prev.birthdays.filter(b => b.id !== id),
+    }));
+  }, []);
+
   // Settings
   const updateSettings = useCallback((settings: Partial<UserSettings>) => {
     setState(prev => ({
@@ -778,6 +865,15 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         addMeditation,
         deleteMeditation,
         addPomodoroSession,
+        addMaterialDebt,
+        updateMaterialDebt,
+        deleteMaterialDebt,
+        addSpiritualObligation,
+        updateSpiritualObligation,
+        deleteSpiritualObligation,
+        addBirthday,
+        updateBirthday,
+        deleteBirthday,
         updateSettings,
         exportData,
         importData,
