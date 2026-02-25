@@ -53,9 +53,9 @@ const priorities: { id: TaskPriority; label: string; color: string }[] = [
 
 const quadrants: { id: EisenhowerQuadrant; title: string; subtitle: string; color: string; bgColor: string }[] = [
   { id: 'doFirst', title: 'doFirst', subtitle: 'urgent + important', color: '#ef4444', bgColor: 'rgba(239, 68, 68, 0.1)' },
-  { id: 'schedule', title: 'schedule', subtitle: 'important', color: '#f59e0b', bgColor: 'rgba(245, 158, 11, 0.1)' },
-  { id: 'delegate', title: 'delegate', subtitle: 'urgent', color: '#eab308', bgColor: 'rgba(234, 179, 8, 0.1)' },
-  { id: 'eliminate', title: 'eliminate', subtitle: 'neither', color: '#6b7280', bgColor: 'rgba(107, 114, 128, 0.1)' },
+  { id: 'schedule', title: 'schedule', subtitle: 'important', color: '#3b82f6', bgColor: 'rgba(59, 130, 246, 0.1)' },
+  { id: 'delegate', title: 'delegate', subtitle: 'urgent', color: '#f97316', bgColor: 'rgba(249, 115, 22, 0.1)' },
+  { id: 'eliminate', title: 'eliminate', subtitle: 'neither', color: '#22c55e', bgColor: 'rgba(34, 197, 94, 0.1)' },
 ];
 
 type ViewMode = 'kanban' | 'list' | 'matrix';

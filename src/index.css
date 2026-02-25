@@ -1,4 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Vazirmatn:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Vazirmatn:wght@100;200;300;400;500;600;700;800;900&family=Estedad:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://cdn.jsdelivr.net/gh/rastikerdar/sahel-font@v3.4.0/dist/font-face.css');
+@import url('https://cdn.jsdelivr.net/gh/rastikerdar/shabnam-font@v5.0.1/dist/font-face.css');
 
 @tailwind base;
 @tailwind components;
@@ -31,7 +33,11 @@
     --border: 220 13% 91%;
     --input: 220 13% 91%;
     --ring: 217 91% 53%;
-    --radius: 0.75rem;
+    --radius: 0.5rem;
+    
+    /* Persian Font Variable */
+    --persian-font: 'Vazirmatn', sans-serif;
+    --english-font: 'Inter', sans-serif;
     
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 0 0% 26%;
@@ -101,12 +107,20 @@
   
   body {
     @apply bg-background text-foreground antialiased;
-    font-family: 'Inter', 'Vazirmatn', sans-serif;
+    font-family: var(--english-font);
   }
 
   body[dir="rtl"] {
-    font-family: 'Vazirmatn', 'Inter', sans-serif;
+    font-family: var(--persian-font);
   }
+
+  /* Font classes for dynamic switching */
+  .font-persian-vazirmatn { font-family: 'Vazirmatn', sans-serif; }
+  .font-persian-sahel { font-family: 'Sahel', sans-serif; }
+  .font-persian-shabnam { font-family: 'Shabnam', sans-serif; }
+  .font-persian-estedad { font-family: 'Estedad', sans-serif; }
+  .font-english-inter { font-family: 'Inter', sans-serif; }
+  .font-english-geist { font-family: 'Geist', sans-serif; }
 }
 
 @layer components {
@@ -315,6 +329,12 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+  
+  /* Disable scroll animations */
+  .scroll-animation, [data-scroll] {
+    animation: none !important;
+    transform: none !important;
+  }
 }
 
 /* Persian number support */
@@ -322,14 +342,64 @@
   font-feature-settings: "numr";
 }
 
-/* Custom focus styles */
+/* Enhanced focus styles for accessibility */
 *:focus-visible {
   outline: 2px solid hsl(var(--ring));
   outline-offset: 2px;
+  border-radius: calc(var(--radius) - 2px);
+}
+
+/* High contrast focus for keyboard navigation */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px hsl(var(--ring) / 0.2);
+}
+
+/* Skip to main content link for accessibility */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  padding: 8px 16px;
+  z-index: 100;
+  transition: top 0.2s;
+}
+
+.skip-link:focus {
+  top: 0;
 }
 
 /* Selection styles */
 ::selection {
   background: hsl(var(--primary) / 0.3);
   color: inherit;
+}
+
+/* Touch target minimum size (48px as per WCAG) */
+button, 
+[role="button"],
+input[type="checkbox"],
+input[type="radio"],
+select,
+a {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Improved link styles */
+a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+a:hover {
+  text-decoration-thickness: 2px;
 }

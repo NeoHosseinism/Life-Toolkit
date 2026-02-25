@@ -17,7 +17,7 @@ import type { AppState } from '@/types';
 // ─────────────────────────────────────────────────────────────────────────────
 // Schema version — bump this whenever AppState shape changes
 // ─────────────────────────────────────────────────────────────────────────────
-export const CURRENT_SCHEMA_VERSION = 3;
+export const CURRENT_SCHEMA_VERSION = 9;
 
 const STORAGE_KEY = 'selfmonitor-data';
 const VERSION_KEY = 'selfmonitor-schema-version';
@@ -274,6 +274,42 @@ export const EXTRA_MIGRATIONS = [
         streakFreezes: h.streakFreezes ?? 1,   // everyone starts with 1 free freeze
         freezesUsedDates: h.freezesUsedDates ?? [],
       })),
+    }),
+  },
+  {
+    version: 7,
+    description: 'Add materialDebts and spiritualObligations arrays',
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    up: (data: any) => ({
+      ...data,
+      materialDebts: data.materialDebts ?? [],
+      spiritualObligations: data.spiritualObligations ?? [],
+    }),
+  },
+  {
+    version: 8,
+    description: 'Add birthdays array',
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    up: (data: any) => ({
+      ...data,
+      birthdays: data.birthdays ?? [],
+    }),
+  },
+  {
+    version: 9,
+    description: 'Add font settings to user settings',
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    up: (data: any) => ({
+      ...data,
+      settings: {
+        ...(data.settings ?? {}),
+        font: data.settings?.font ?? {
+          persianFont: 'vazirmatn',
+          englishFont: 'inter',
+          fontSize: 'medium',
+          usePersianNumbers: true,
+        },
+      },
     }),
   },
 ];

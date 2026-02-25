@@ -177,6 +177,18 @@ export interface PomodoroSession {
   completed: boolean;
 }
 
+// ─── Font types ───────────────────────────────────────────────────────────────
+
+export type PersianFont = 'vazirmatn' | 'iran-sans' | 'sahel' | 'shabnam' | 'estedad';
+export type EnglishFont = 'inter' | 'geist' | 'plus-jakarta-sans';
+
+export interface FontSettings {
+  persianFont: PersianFont;
+  englishFont: EnglishFont;
+  fontSize: 'small' | 'medium' | 'large';
+  usePersianNumbers: boolean;
+}
+
 export interface UserSettings {
   language: Language;
   calendar: CalendarType;
@@ -196,6 +208,58 @@ export interface UserSettings {
     autoStartBreaks: boolean;
     autoStartPomodoros: boolean;
   };
+  font: FontSettings;
+}
+
+// ─── Debts & Obligations types ────────────────────────────────────────────────
+
+export type DebtType = 'material' | 'spiritual';
+export type MaterialDebtCategory = 'borrowed-money' | 'lent-money' | 'borrowed-item' | 'lent-item';
+export type SpiritualObligationType = 'qaza-namaz' | 'nazr' | 'kaffarah' | 'zakat' | 'khums' | 'other';
+
+export interface MaterialDebt {
+  id: string;
+  type: 'borrowed' | 'lent';
+  category: MaterialDebtCategory;
+  amount?: number;
+  itemDescription?: string;
+  personName: string;
+  description?: string;
+  date: string;
+  dueDate?: string;
+  isPaid: boolean;
+  paidDate?: string;
+  notes?: string;
+  createdAt: string;
+}
+
+export interface SpiritualObligation {
+  id: string;
+  type: SpiritualObligationType;
+  title: string;
+  description?: string;
+  quantity?: number;
+  quantityDone?: number;
+  unit?: string;
+  isFulfilled: boolean;
+  fulfilledDate?: string;
+  notes?: string;
+  createdAt: string;
+}
+
+// ─── Birthday types ───────────────────────────────────────────────────────────
+
+export type BirthdayRelation = 'family' | 'friend' | 'colleague' | 'other';
+
+export interface Birthday {
+  id: string;
+  name: string;
+  date: string;
+  calendarType: CalendarType;
+  relation: BirthdayRelation;
+  notes?: string;
+  reminderDaysBefore: number[];
+  createdAt: string;
 }
 
 // ─── NEW: Planning types ───────────────────────────────────────────────────────
@@ -360,9 +424,18 @@ export interface AppState {
   meditations: MeditationSession[];
   pomodoroSessions: PomodoroSession[];
   settings: UserSettings;
-  // New sections (added via migrations)
+  // Planning & Prompt Library
   planning: PlanningState;
   promptLibrary: PromptLibraryState;
+  // Time Blocking, Journal, Notifications (migration v4-6)
+  timeBlocks: TimeBlock[];
+  journal: { entries: JournalEntry[]; settings: JournalSettings };
+  notificationRules: NotificationRule[];
+  // Debts & Obligations (migration v7)
+  materialDebts: MaterialDebt[];
+  spiritualObligations: SpiritualObligation[];
+  // Birthdays (migration v8)
+  birthdays: Birthday[];
 }
 
 // ─── Dashboard ────────────────────────────────────────────────────────────────
