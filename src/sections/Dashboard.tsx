@@ -150,7 +150,7 @@ function DailyScoreGauge({ score }: { score: number }) {
           </RadialBarChart>
         </ResponsiveContainer>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="text-2xl font-bold">{toPersianNum(clamped)}</span>
+          <span className="text-xl sm:text-2xl font-bold">{toPersianNum(clamped)}</span>
           <span className="text-[10px] text-muted-foreground">{isRTL ? 'امتیاز روز' : 'Daily Score'}</span>
         </div>
       </div>
@@ -383,7 +383,7 @@ export default function Dashboard() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="h-72">
+              <div className="h-56 sm:h-64 lg:h-72">
                 <ResponsiveContainer width="100%" height="100%">
                   <RadarChart data={lifeBalanceData}>
                     <PolarGrid stroke="hsl(var(--border))" />
@@ -409,13 +409,13 @@ export default function Dashboard() {
             </CardHeader>
             <CardContent>
               {habitStreakData.length === 0 ? (
-                <div className="h-56 flex items-center justify-center text-muted-foreground text-sm">
+                <div className="h-44 sm:h-48 lg:h-56 flex items-center justify-center text-muted-foreground text-sm">
                   {t('noData')}
                 </div>
               ) : (
-                <div className="h-56">
+                <div className="h-44 sm:h-48 lg:h-56">
                   <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={habitStreakData} layout="vertical" margin={{ left: 0, right: 16 }}>
+                    <BarChart data={habitStreakData} layout="vertical" margin={{ left: isRTL ? 16 : 0, right: isRTL ? 0 : 16 }}>
                       <XAxis type="number" tick={{ fontSize: 11 }} stroke="hsl(var(--muted-foreground))" tickFormatter={(v) => toPersianNum(v)} />
                       <YAxis type="category" dataKey="name" width={72} tick={{ fontSize: 11 }} stroke="hsl(var(--muted-foreground))" />
                       <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" horizontal={false} />
@@ -443,7 +443,7 @@ export default function Dashboard() {
               <CardTitle className="text-base font-semibold">{isRTL ? 'روند عادت‌ها (۳۰ روز)' : 'Habit Trend (30 days)'}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="h-44">
+              <div className="h-36 sm:h-40 lg:h-44">
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={habitTrendData}>
                     <defs>
@@ -471,7 +471,7 @@ export default function Dashboard() {
               <CardTitle className="text-base font-semibold">{t('money')}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="h-44 relative">
+              <div className="h-36 sm:h-40 lg:h-44 relative">
                 {hasExpenses ? (
                   <>
                     <ResponsiveContainer width="100%" height="100%">
@@ -520,7 +520,7 @@ export default function Dashboard() {
               <CardTitle className="text-base font-semibold">{isRTL ? 'وظایف تکمیل شده (۷ روز)' : 'Tasks Completed (7 days)'}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="h-40">
+              <div className="h-36 sm:h-40">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={taskChartData}>
                     <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
@@ -541,7 +541,7 @@ export default function Dashboard() {
               <CardTitle className="text-base font-semibold">{isRTL ? 'زمان تمرکز (ساعت)' : 'Focus Time (hrs)'}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="h-40">
+              <div className="h-36 sm:h-40">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={focusTimeData}>
                     <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />

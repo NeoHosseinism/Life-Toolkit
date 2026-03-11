@@ -44,6 +44,11 @@
   );
 }
 
+.dark .glass {
+  background: var(--glass-bg-dark, rgba(0, 0, 0, 0.3));
+  border-color: var(--glass-border-dark, rgba(255, 255, 255, 0.08));
+}
+
 /* Sidebar glass treatment */
 aside.lg\:flex {
   background: var(--glass-bg-strong, var(--glass-bg));
@@ -232,6 +237,12 @@ button:active:not(:disabled) {
   100% {
     transform: scale(1.1);
     opacity: 0.8;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .streak-flame {
+    animation: none;
   }
 }
 
@@ -474,5 +485,12 @@ aside.collapsed .sidebar-label {
 
   .recharts-tooltip-wrapper {
     font-size: 11px !important;
+  }
+}
+
+/* ── Landscape: compact chart heights ─────────────────────────────────── */
+@media (orientation: landscape) and (max-height: 500px) {
+  .recharts-responsive-container {
+    height: 150px !important;
   }
 }

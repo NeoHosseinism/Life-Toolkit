@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { callOpenRouter, buildJournalMessages, OPENROUTER_MODELS } from '@/lib/openrouter';
+import { useLanguage } from '@/contexts/LanguageContext';
 import type { JournalEntry, JournalMood, JournalTone } from '@/types';
 
 // ─── helpers ──────────────────────────────────────────────────────────────────
@@ -124,13 +125,14 @@ function AIInsightPanel({
   onGenerate: () => void;
   hasKey: boolean;
 }) {
+  const { t } = useLanguage();
   if (!hasKey) {
     return (
       <div className="rounded-2xl border border-dashed border-border p-5 text-center space-y-2">
         <Sparkles className="w-8 h-8 mx-auto text-primary/40" />
         <p className="text-sm font-medium">AI Insights</p>
         <p className="text-xs text-muted-foreground">
-          Add your <a href="https://openrouter.ai/keys" target="_blank" rel="noopener noreferrer" className="text-primary underline">OpenRouter API key</a> in Settings to unlock AI journal analysis.
+          {t('addApiKeyMessage') || 'Add your'} <a href="https://openrouter.ai/keys" target="_blank" rel="noopener noreferrer" className="text-primary underline">OpenRouter API key</a> {t('inSettingsUnlock') || 'in Settings to unlock AI journal analysis.'}
         </p>
       </div>
     );
@@ -320,7 +322,7 @@ function EntryHistory({ entries, onSelect }: {
                   <Badge variant="outline" className={`text-[10px] ${mood.color}`}>{mood.label}</Badge>
                 </div>
                 {entry.freeWrite && (
-                  <p className="text-xs text-muted-foreground truncate mt-0.5">{entry.freeWrite}</p>
+                  <p className="text-xs text-muted-foreground truncate mt-0.5 break-words">{entry.freeWrite}</p>
                 )}
               </div>
               {entry.aiInsight && (
@@ -452,7 +454,7 @@ export default function Journal() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold flex items-center gap-2">
+          <h2 className="text-xl sm:text-2xl font-bold flex items-center gap-2">
             <BookOpen className="w-6 h-6 text-primary" />Daily Journal
           </h2>
           <p className="text-sm text-muted-foreground mt-0.5 flex items-center gap-1.5">

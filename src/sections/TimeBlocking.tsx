@@ -359,7 +359,7 @@ export default function TimeBlocking() {
       {/* Header */}
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <div>
-          <h2 className="text-2xl font-bold flex items-center gap-2">
+          <h2 className="text-xl sm:text-2xl font-bold flex items-center gap-2">
             <Clock className="w-6 h-6 text-primary" />Time Blocking
           </h2>
           <p className="text-sm text-muted-foreground">Click on the grid to add a block</p>

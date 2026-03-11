@@ -78,7 +78,7 @@ export default function CommandPalette({ open, setOpen, onNavigate }: CommandPal
   return (
     <CommandDialog open={open} onOpenChange={setOpen}>
       <div className="flex items-center border-b px-3" cmdk-input-wrapper="">
-        <Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />
+        <Search className="me-2 h-4 w-4 shrink-0 opacity-50" />
         <CommandInput 
           placeholder={t('searchCommands') || 'Search commands...'} 
           className="flex h-11 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
@@ -98,7 +98,7 @@ export default function CommandPalette({ open, setOpen, onNavigate }: CommandPal
                 onSelect={() => handleSelect(() => onNavigate(item.id))}
                 className="relative flex cursor-pointer select-none items-center rounded-sm px-2 py-2 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
               >
-                <Icon className="mr-2 h-4 w-4" />
+                <Icon className="me-2 h-4 w-4" />
                 <span className="flex-1 capitalize">
                   {t(item.id) || item.id.replace(/([A-Z])/g, ' $1').trim()}
                 </span>
@@ -118,7 +118,7 @@ export default function CommandPalette({ open, setOpen, onNavigate }: CommandPal
             onSelect={() => handleSelect(() => onNavigate('tasks'))}
             className="relative flex cursor-pointer select-none items-center rounded-sm px-2 py-2 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground"
           >
-            <Plus className="mr-2 h-4 w-4" />
+            <Plus className="me-2 h-4 w-4" />
             <span>{t('addTask') || 'Add New Task'}</span>
           </CommandItem>
           
@@ -126,7 +126,7 @@ export default function CommandPalette({ open, setOpen, onNavigate }: CommandPal
             onSelect={() => handleSelect(() => onNavigate('journal'))}
             className="relative flex cursor-pointer select-none items-center rounded-sm px-2 py-2 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground"
           >
-            <PenLine className="mr-2 h-4 w-4" />
+            <PenLine className="me-2 h-4 w-4" />
             <span>{t('writeJournal') || 'Write Journal Entry'}</span>
           </CommandItem>
 
@@ -134,7 +134,7 @@ export default function CommandPalette({ open, setOpen, onNavigate }: CommandPal
             onSelect={() => handleSelect(() => onNavigate('pomodoro'))}
             className="relative flex cursor-pointer select-none items-center rounded-sm px-2 py-2 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground"
           >
-            <Clock className="mr-2 h-4 w-4" />
+            <Clock className="me-2 h-4 w-4" />
             <span>{t('startFocus') || 'Start Focus Session'}</span>
           </CommandItem>
         </CommandGroup>
@@ -151,7 +151,7 @@ export default function CommandPalette({ open, setOpen, onNavigate }: CommandPal
             })}
             className="relative flex cursor-pointer select-none items-center rounded-sm px-2 py-2 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground"
           >
-            {isDark ? <Sun className="mr-2 h-4 w-4" /> : <Moon className="mr-2 h-4 w-4" />}
+            {isDark ? <Sun className="me-2 h-4 w-4" /> : <Moon className="me-2 h-4 w-4" />}
             <span>
               {t('toggleTheme') || `Switch to ${isDark ? 'Light' : 'Dark'} Mode`}
             </span>
@@ -161,7 +161,7 @@ export default function CommandPalette({ open, setOpen, onNavigate }: CommandPal
             onSelect={() => handleSelect(() => setLanguage(language === 'fa' ? 'en' : 'fa'))}
             className="relative flex cursor-pointer select-none items-center rounded-sm px-2 py-2 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground"
           >
-            <Globe className="mr-2 h-4 w-4" />
+            <Globe className="me-2 h-4 w-4" />
             <span>
               {t('switchLanguage') || `Switch to ${language === 'fa' ? 'English' : 'Persian'}`}
             </span>

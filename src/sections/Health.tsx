@@ -166,7 +166,7 @@ export default function Health() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">{t('exercise')}</p>
-                  <p className="text-2xl font-bold">
+                  <p className="text-xl sm:text-2xl font-bold">
                     {toPersianNum(Math.round(totalExerciseMinutes / 60 * 10) / 10)}h
                   </p>
                   <p className="text-xs text-muted-foreground">
@@ -191,7 +191,7 @@ export default function Health() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">{t('sleep')}</p>
-                  <p className="text-2xl font-bold">
+                  <p className="text-xl sm:text-2xl font-bold">
                     {toPersianNum(Math.round(avgSleepDuration * 10) / 10)}h
                   </p>
                   <p className="text-xs text-muted-foreground">{t('average')}</p>
@@ -214,7 +214,7 @@ export default function Health() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">{t('streak')}</p>
-                  <p className="text-2xl font-bold">{toPersianNum(0)}</p>
+                  <p className="text-xl sm:text-2xl font-bold">{toPersianNum(0)}</p>
                   <p className="text-xs text-muted-foreground">{t('days')}</p>
                 </div>
                 <div className="w-12 h-12 rounded-xl bg-orange-500/10 flex items-center justify-center">
@@ -262,7 +262,7 @@ export default function Health() {
                       </SelectTrigger>
                       <SelectContent>
                         {exerciseTypes.map(type => (
-                          <SelectItem key={type} value={type}>{type}</SelectItem>
+                          <SelectItem key={type} value={type}>{t(type.toLowerCase()) || type}</SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
@@ -352,6 +352,7 @@ export default function Health() {
                       <Button
                         variant="ghost"
                         size="icon"
+                        aria-label="Delete exercise"
                         onClick={() => deleteExercise(exercise.id)}
                       >
                         <X className="w-4 h-4" />
@@ -501,6 +502,7 @@ export default function Health() {
                       <Button
                         variant="ghost"
                         size="icon"
+                        aria-label="Delete sleep record"
                         onClick={() => deleteSleep(s.id)}
                       >
                         <X className="w-4 h-4" />

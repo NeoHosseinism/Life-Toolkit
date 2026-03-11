@@ -431,7 +431,7 @@ export default function PromptLibrary() {
       {/* Header */}
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div>
-          <h2 className="text-2xl font-bold flex items-center gap-2">
+          <h2 className="text-xl sm:text-2xl font-bold flex items-center gap-2">
             <Sparkles className="w-6 h-6 text-primary" />
             Prompt Library
           </h2>
@@ -454,7 +454,7 @@ export default function PromptLibrary() {
         ].map(({ label, value }) => (
           <Card key={label} className="border-border/50">
             <CardContent className="p-4">
-              <p className="text-2xl font-bold">{value}</p>
+              <p className="text-xl sm:text-2xl font-bold">{value}</p>
               <p className="text-xs text-muted-foreground">{label}</p>
             </CardContent>
           </Card>

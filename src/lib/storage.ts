@@ -64,11 +64,6 @@ const MIGRATIONS: Migration[] = [
     }),
   },
   // ── Add future migrations here ─────────────────────────────────────────────
-  // {
-  //   version: 4,
-  //   description: 'Rename field X to Y',
-  //   up: (data) => { ... },
-  // },
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -82,7 +77,7 @@ export function loadState(defaultState: AppState): AppState {
     if (!raw) return defaultState;
 
     let data = JSON.parse(raw);
-    const savedVersion = parseInt(localStorage.getItem(VERSION_KEY) ?? '0', 10);
+    const savedVersion = parseInt(localStorage.getItem(VERSION_KEY) ?? '0', 10) || 0;
 
     if (savedVersion < CURRENT_SCHEMA_VERSION) {
       // Back up BEFORE migrating so the user can recover if something goes wrong
@@ -226,19 +221,15 @@ function deepMergeWithDefault(defaults: any, saved: any): any {
     if (key in defaults && typeof defaults[key] === 'object' && !Array.isArray(defaults[key])) {
       result[key] = deepMergeWithDefault(defaults[key], saved[key]);
     } else {
-      result[key] = saved[key];
+      result[key] = saved[key] ?? defaults[key];
     }
   }
   return result;
 }
 
 // ─── Additional migrations (added after initial delivery) ────────────────────
-// These are appended to the MIGRATIONS array at runtime via the exported helper.
-// In a real codebase you'd edit MIGRATIONS directly — but since this file is
-// already compiled into the bundle, we export the new migrations so AppContext
-// can merge them before calling loadState().
 
-export const EXTRA_MIGRATIONS = [
+const EXTRA_MIGRATIONS: Migration[] = [
   {
     version: 4,
     description: 'Add timeBlocks array',
@@ -309,3 +300,6 @@ export const EXTRA_MIGRATIONS = [
     }),
   },
 ];
+
+// Merge extra migrations into main array so runMigrations processes them all
+MIGRATIONS.push(...EXTRA_MIGRATIONS);

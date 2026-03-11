@@ -121,25 +121,25 @@ export default function Meditation() {
         <Card>
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">{t('sessions')}</p>
-            <p className="text-2xl font-bold">{toPersianNum(totalSessions)}</p>
+            <p className="text-xl sm:text-2xl font-bold">{toPersianNum(totalSessions)}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">{t('totalTime')}</p>
-            <p className="text-2xl font-bold">{toPersianNum(Math.round(totalMinutes / 60 * 10) / 10)}h</p>
+            <p className="text-xl sm:text-2xl font-bold">{toPersianNum(Math.round(totalMinutes / 60 * 10) / 10)}h</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">{t('today')}</p>
-            <p className="text-2xl font-bold">{toPersianNum(todaySessions.length)}</p>
+            <p className="text-xl sm:text-2xl font-bold">{toPersianNum(todaySessions.length)}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">{t('streak')}</p>
-            <p className="text-2xl font-bold">{toPersianNum(0)}</p>
+            <p className="text-xl sm:text-2xl font-bold">{toPersianNum(0)}</p>
           </CardContent>
         </Card>
       </div>
@@ -147,7 +147,7 @@ export default function Meditation() {
       {/* Timer */}
       <div className="flex justify-center">
         <Card className="w-full max-w-lg">
-          <CardContent className="p-8">
+          <CardContent className="p-4 sm:p-6 lg:p-8">
             {/* Type Selector */}
             <div className="flex flex-wrap justify-center gap-2 mb-6">
               {meditationTypes.map((type) => {
@@ -188,7 +188,7 @@ export default function Meditation() {
             <div className="relative flex justify-center mb-8">
               {/* Breathing animation circle */}
               <motion.div
-                className="absolute w-64 h-64 rounded-full opacity-20"
+                className="absolute w-48 h-48 sm:w-64 sm:h-64 rounded-full opacity-20"
                 style={{ backgroundColor: selectedTypeConfig?.color }}
                 animate={isRunning ? {
                   scale: [1, 1.2, 1],
@@ -203,10 +203,10 @@ export default function Meditation() {
               
               {/* Timer circle */}
               <div
-                className="relative w-64 h-64 rounded-full flex flex-col items-center justify-center border-4"
+                className="relative w-48 h-48 sm:w-64 sm:h-64 rounded-full flex flex-col items-center justify-center border-4"
                 style={{ borderColor: selectedTypeConfig?.color }}
               >
-                <span className="text-5xl font-bold tabular-nums" style={{ color: selectedTypeConfig?.color }}>
+                <span className="text-4xl sm:text-5xl font-bold tabular-nums" style={{ color: selectedTypeConfig?.color }}>
                   {formatTime(timeLeft)}
                 </span>
                 <p className="text-muted-foreground mt-2">{t(selectedTypeConfig?.label || 'mindfulness')}</p>
@@ -360,7 +360,7 @@ export default function Meditation() {
                     <div className="text-right">
                       <p className="font-medium">{toPersianNum(session.duration)}m</p>
                       {session.notes && (
-                        <p className="text-xs text-muted-foreground truncate max-w-[150px]">
+                        <p className="text-xs text-muted-foreground truncate max-w-[120px] sm:max-w-[150px]">
                           {session.notes}
                         </p>
                       )}

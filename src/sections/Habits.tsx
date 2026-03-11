@@ -190,7 +190,7 @@ function HabitCard({
               </div>
 
               {/* 7-day grid */}
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1 flex-wrap">
                 {last7Days.map((date, i) => {
                   const done   = habit.completions.includes(date);
                   const frozen = usedDates.includes(date);
@@ -201,7 +201,7 @@ function HabitCard({
                         <TooltipTrigger asChild>
                           <div
                             className={`
-                              w-7 h-7 rounded-lg flex items-center justify-center text-[10px] font-medium transition-all
+                              w-8 h-8 sm:w-7 sm:h-7 rounded-lg flex items-center justify-center text-[10px] font-medium transition-all
                               ${done ? 'text-white' : frozen ? 'bg-blue-500/20 text-blue-500' : 'bg-muted text-muted-foreground'}
                               ${isToday && !done && !frozen ? 'ring-2 ring-primary' : ''}
                             `}
@@ -211,7 +211,7 @@ function HabitCard({
                           </div>
                         </TooltipTrigger>
                         <TooltipContent className="text-xs">
-                          {done ? 'Completed ✅' : frozen ? 'Streak frozen ❄️' : date}
+                          {done ? (t('completedCheck') || 'Completed ✅') : frozen ? (t('streakFrozen') || 'Streak frozen ❄️') : date}
                         </TooltipContent>
                       </Tooltip>
                     </TooltipProvider>
@@ -222,9 +222,9 @@ function HabitCard({
               {/* Progress bar */}
               <div>
                 <div className="flex justify-between text-[11px] text-muted-foreground mb-1">
-                  <span>Best: {toPersianNum(habit.longestStreak)}d</span>
+                  <span>{t('best') || 'Best'}: {toPersianNum(habit.longestStreak)}{t('daysShort') || 'd'}</span>
                   {nextMilestone && (
-                    <span className="text-primary">{nextMilestone - habit.streak}d to {nextMilestone}-day milestone</span>
+                    <span className="text-primary">{toPersianNum(nextMilestone - habit.streak)}{t('daysShort') || 'd'} {t('toMilestone') || 'to'} {toPersianNum(nextMilestone)}{t('dayMilestone') || '-day milestone'}</span>
                   )}
                 </div>
                 <div className="h-1.5 bg-muted rounded-full overflow-hidden">
@@ -326,7 +326,7 @@ export default function Habits() {
     <TooltipProvider>
       <div className="space-y-6 max-w-3xl mx-auto">
         {/* Stats */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
           {[
             { label: t('habits'),    value: habits.length,     color: '' },
             { label: t('streak'),    value: maxStreak,         color: 'text-orange-500' },
@@ -336,7 +336,7 @@ export default function Habits() {
             <Card key={label} className="border-border/50">
               <CardContent className="p-4">
                 <p className="text-xs text-muted-foreground">{label}</p>
-                <p className={`text-2xl font-bold ${color}`}>{toPersianNum(value)}</p>
+                <p className={`text-xl sm:text-2xl font-bold ${color}`}>{toPersianNum(value)}</p>
               </CardContent>
             </Card>
           ))}

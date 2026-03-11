@@ -2,7 +2,8 @@ import { useState } from 'react';
 import {
   LayoutDashboard, CheckSquare, Plus, Menu,
   Heart, Wallet, BookOpen, Settings, Target,
-  Sparkles, Clock, Layers, Brain, HandCoins, Cake
+  Sparkles, Clock, Layers, Brain, HandCoins, Cake,
+  GraduationCap, Timer, PenLine, Calendar
 } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
@@ -23,7 +24,7 @@ interface MobileNavProps {
 const mainNavItems: { id: ViewType; icon: React.ElementType; label: string }[] = [
   { id: 'dashboard', icon: LayoutDashboard, label: 'Dashboard' },
   { id: 'tasks', icon: CheckSquare, label: 'Tasks' },
-  { id: 'calendar', icon: Clock, label: 'Calendar' },
+  { id: 'calendar', icon: Calendar, label: 'Calendar' },
   { id: 'health', icon: Heart, label: 'Health' },
 ];
 
@@ -41,7 +42,7 @@ export default function MobileNav({ currentView, onNavigate, onAddAction }: Mobi
   return (
     <>
       {/* Bottom Navigation Bar */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 border-t bg-background/95 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60">
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 border-t bg-background/95 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60 pb-[env(safe-area-inset-bottom)]">
         <div className="flex items-center justify-around h-16 px-2">
           {/* Main items */}
           {mainNavItems.map((item) => {
@@ -74,7 +75,7 @@ export default function MobileNav({ currentView, onNavigate, onAddAction }: Mobi
             <div className="w-11 h-11 rounded-full bg-primary flex items-center justify-center shadow-lg shadow-primary/30 -mt-5">
               <Plus className="w-6 h-6 text-primary-foreground" />
             </div>
-            <span className="text-[11px] font-medium text-muted-foreground">Add</span>
+            <span className="text-[11px] font-medium text-muted-foreground">{t('add') || 'Add'}</span>
           </button>
 
           {/* More button (triggers drawer) */}
@@ -82,7 +83,7 @@ export default function MobileNav({ currentView, onNavigate, onAddAction }: Mobi
             <SheetTrigger asChild>
               <button className="flex flex-col items-center justify-center gap-1 flex-1 h-12 max-w-[64px] text-muted-foreground hover:text-foreground">
                 <Menu className="w-5 h-5" />
-                <span className="text-[11px] font-medium">More</span>
+                <span className="text-[11px] font-medium">{t('more') || 'More'}</span>
               </button>
             </SheetTrigger>
             <SheetContent 
@@ -150,6 +151,46 @@ export default function MobileNav({ currentView, onNavigate, onAddAction }: Mobi
                             transition-colors
                             ${isActive 
                               ? 'bg-primary text-primary-foreground' 
+                              : 'hover:bg-muted'
+                            }
+                          `}
+                        >
+                          <Icon className="w-5 h-5" />
+                          <span className="font-medium">
+                            {t(item.id) || item.label}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  <div className="border-t my-2 mx-4" />
+
+                  {/* Life */}
+                  <div className="px-2">
+                    <p className="text-xs font-semibold text-muted-foreground uppercase px-3 mb-2">
+                      {t('life') || 'Life'}
+                    </p>
+                    {[
+                      { id: 'learning', icon: GraduationCap, label: 'Learning' },
+                      { id: 'meditation', icon: PenLine, label: 'Meditation' },
+                      { id: 'debts', icon: HandCoins, label: 'Debts' },
+                      { id: 'birthdays', icon: Cake, label: 'Birthdays' },
+                    ].map((item) => {
+                      const Icon = item.icon;
+                      const isActive = currentView === item.id;
+                      return (
+                        <button
+                          key={item.id}
+                          onClick={() => {
+                            onNavigate(item.id as ViewType);
+                            setMoreOpen(false);
+                          }}
+                          className={`
+                            w-full flex items-center gap-3 px-3 py-2.5 rounded-lg mb-1
+                            transition-colors
+                            ${isActive
+                              ? 'bg-primary text-primary-foreground'
                               : 'hover:bg-muted'
                             }
                           `}

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Trash2, Check, HandCoins, Sparkles, AlertCircle, Clock, ChevronDown, ChevronUp } from 'lucide-react';
+import { Plus, Trash2, Check, HandCoins, Sparkles, AlertCircle, ChevronDown, ChevronUp } from 'lucide-react';
 import { useApp } from '@/contexts/AppContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
@@ -35,7 +35,7 @@ function DebtCard({ debt, onTogglePaid, onDelete }: {
   const { t, isRTL, formatCurrency } = useLanguage();
   const [expanded, setExpanded] = useState(false);
 
-  const isOverdue = !debt.isPaid && debt.dueDate && new Date(debt.dueDate) < new Date();
+  const isOverdue = !debt.isPaid && debt.dueDate && !isNaN(new Date(debt.dueDate).getTime()) && debt.dueDate < new Date().toISOString().split('T')[0];
   const borderColor = debt.isPaid
     ? 'border-green-500/30'
     : isOverdue
@@ -79,23 +79,26 @@ function DebtCard({ debt, onTogglePaid, onDelete }: {
         <div className={`flex items-center gap-1 ${isRTL ? 'flex-row-reverse' : ''}`}>
           <Button
             variant="ghost" size="icon"
-            className="h-7 w-7 text-muted-foreground hover:text-green-500"
+            className="h-9 w-9 text-muted-foreground hover:text-green-500"
             onClick={() => onTogglePaid(debt.id)}
+            aria-label={debt.isPaid ? 'Mark unpaid' : 'Mark paid'}
             title={debt.isPaid ? (t('isPaid')) : (t('isUnpaid'))}
           >
             <Check className={`w-4 h-4 ${debt.isPaid ? 'text-green-500' : ''}`} />
           </Button>
           <Button
             variant="ghost" size="icon"
-            className="h-7 w-7 text-muted-foreground hover:text-destructive"
+            className="h-9 w-9 text-muted-foreground hover:text-destructive"
             onClick={() => onDelete(debt.id)}
+            aria-label="Delete"
           >
             <Trash2 className="w-3.5 h-3.5" />
           </Button>
           <Button
             variant="ghost" size="icon"
-            className="h-7 w-7 text-muted-foreground"
+            className="h-9 w-9 text-muted-foreground"
             onClick={() => setExpanded(e => !e)}
+            aria-label="Toggle details"
           >
             {expanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
           </Button>
@@ -165,15 +168,17 @@ function SpiritualCard({ obl, onToggle, onDelete }: {
         <div className={`flex items-center gap-1 ${isRTL ? 'flex-row-reverse' : ''}`}>
           <Button
             variant="ghost" size="icon"
-            className="h-7 w-7 text-muted-foreground hover:text-green-500"
+            className="h-9 w-9 text-muted-foreground hover:text-green-500"
             onClick={() => onToggle(obl.id)}
+            aria-label="Toggle fulfilled"
           >
             <Check className={`w-4 h-4 ${obl.isFulfilled ? 'text-green-500' : ''}`} />
           </Button>
           <Button
             variant="ghost" size="icon"
-            className="h-7 w-7 text-muted-foreground hover:text-destructive"
+            className="h-9 w-9 text-muted-foreground hover:text-destructive"
             onClick={() => onDelete(obl.id)}
+            aria-label="Delete"
           >
             <Trash2 className="w-3.5 h-3.5" />
           </Button>
@@ -212,7 +217,8 @@ export default function Debts() {
   const unpaidDebts = debts.filter(d => !d.isPaid);
   const totalOwedToMe = unpaidDebts.filter(d => d.direction === 'lent' && d.amount).reduce((s, d) => s + (d.amount ?? 0), 0);
   const totalIOwe = unpaidDebts.filter(d => d.direction === 'borrowed' && d.amount).reduce((s, d) => s + (d.amount ?? 0), 0);
-  const overdueCount = unpaidDebts.filter(d => d.dueDate && new Date(d.dueDate) < new Date()).length;
+  const todayStr = new Date().toISOString().split('T')[0];
+  const overdueCount = unpaidDebts.filter(d => d.dueDate && d.dueDate < todayStr).length;
   const unfulfilledObligations = spiritualObligations.filter(o => !o.isFulfilled).length;
 
   const filteredDebts = debts.filter(d => {

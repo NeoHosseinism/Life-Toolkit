@@ -125,7 +125,7 @@ export function getMonthName(month: number, calendar: 'jalali' | 'gregorian' = '
   if (calendar === 'jalali') {
     return language === 'en' ? jalaliMonthsEn[month - 1] : jalaliMonths[month - 1];
   }
-  return gregorianMonths[month];
+  return gregorianMonths[month - 1];
 }
 
 export function getDayName(day: number, calendar: 'jalali' | 'gregorian' = 'gregorian', language?: 'fa' | 'en'): string {

@@ -36,9 +36,9 @@ export default class ErrorBoundary extends Component<Props, State> {
           <AlertTriangle className="w-10 h-10 text-destructive opacity-60" />
           <p className="text-sm font-medium text-center">Something went wrong in this section.</p>
           {this.state.error && (
-            <p className="text-xs text-muted-foreground/60 font-mono max-w-xs text-center break-all">
+            <pre className="text-xs text-muted-foreground/60 font-mono max-w-md text-center whitespace-pre-wrap overflow-auto max-h-64 p-2 rounded bg-muted/30">
               {this.state.error.message}
-            </p>
+            </pre>
           )}
           <Button variant="outline" size="sm" onClick={this.reset} className="gap-2">
             <RefreshCw className="w-4 h-4" />

@@ -128,17 +128,17 @@ export default function Pomodoro() {
   return (
     <div className="space-y-6">
       {/* Stats */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4">
         <Card>
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">{t('today')}</p>
-            <p className="text-2xl font-bold">{toPersianNum(todaySessions.length)}</p>
+            <p className="text-xl sm:text-2xl font-bold">{toPersianNum(todaySessions.length)}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">{t('focusTime')}</p>
-            <p className="text-2xl font-bold">
+            <p className="text-xl sm:text-2xl font-bold">
               {toPersianNum(Math.round(todayFocusTime / 60))}m
             </p>
           </CardContent>
@@ -146,7 +146,7 @@ export default function Pomodoro() {
         <Card>
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">{t('sessions')}</p>
-            <p className="text-2xl font-bold">{toPersianNum(sessionsCompleted)}</p>
+            <p className="text-xl sm:text-2xl font-bold">{toPersianNum(sessionsCompleted)}</p>
           </CardContent>
         </Card>
         <Card>
@@ -154,7 +154,7 @@ export default function Pomodoro() {
             <p className="text-sm text-muted-foreground">{t('streak')}</p>
             <div className="flex items-center gap-1">
               <Flame className="w-5 h-5 text-orange-500" />
-              <p className="text-2xl font-bold">{toPersianNum(0)}</p>
+              <p className="text-xl sm:text-2xl font-bold">{toPersianNum(0)}</p>
             </div>
           </CardContent>
         </Card>
@@ -163,7 +163,7 @@ export default function Pomodoro() {
       {/* Timer */}
       <div className="flex justify-center">
         <Card className="w-full max-w-md bg-card/50 backdrop-blur-sm">
-          <CardContent className="p-8">
+          <CardContent className="p-4 sm:p-6 lg:p-8">
             {/* Timer Type Selector */}
             <div className="flex justify-center gap-2 mb-8">
               {(Object.keys(timerConfigs) as TimerType[]).map((type) => {
@@ -185,7 +185,7 @@ export default function Pomodoro() {
             </div>
 
             {/* Timer Circle */}
-            <div className="relative w-44 h-44 sm:w-52 sm:h-52 lg:w-64 lg:h-64 mx-auto mb-8">
+            <div className="relative w-44 h-44 sm:w-52 sm:h-52 lg:w-64 lg:h-64 mx-auto mb-6 sm:mb-8">
               {/* Pulsing ring when running */}
               {isRunning && (
                 <motion.div
@@ -271,7 +271,7 @@ export default function Pomodoro() {
               <Button
                 onClick={toggleTimer}
                 aria-label={isRunning ? 'Pause timer' : 'Start timer'}
-                className="w-24 h-24 rounded-full btn-shine"
+                className="w-20 h-20 sm:w-24 sm:h-24 rounded-full btn-shine"
                 style={{ backgroundColor: config.color }}
               >
                 {isRunning ? <Pause className="w-8 h-8" /> : <Play className="w-8 h-8 ml-1" />}

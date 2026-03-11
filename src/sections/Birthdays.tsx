@@ -22,6 +22,7 @@ function getDaysUntilBirthday(dateStr: string): number {
   today.setHours(0, 0, 0, 0);
   // dateStr is either MM-DD or YYYY-MM-DD
   const parts = dateStr.split('-');
+  if (parts.length < 2) return 999;
   let month: number, day: number;
   if (parts.length === 3) {
     month = parseInt(parts[1], 10) - 1;
@@ -30,6 +31,7 @@ function getDaysUntilBirthday(dateStr: string): number {
     month = parseInt(parts[0], 10) - 1;
     day = parseInt(parts[1], 10);
   }
+  if (isNaN(month) || isNaN(day) || month < 0 || month > 11 || day < 1 || day > 31) return 999;
   const next = new Date(today.getFullYear(), month, day);
   if (next < today) next.setFullYear(today.getFullYear() + 1);
   return Math.round((next.getTime() - today.getTime()) / 86400000);
@@ -117,10 +119,10 @@ function BirthdayCard({ birthday, onDelete, onEdit }: {
         </div>
 
         <div className={`flex items-center gap-1 shrink-0 ${isRTL ? 'flex-row-reverse' : ''}`}>
-          <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground hover:text-foreground" onClick={() => onEdit(birthday)}>
+          <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground hover:text-foreground" aria-label="Edit" onClick={() => onEdit(birthday)}>
             <Edit2 className="w-3.5 h-3.5" />
           </Button>
-          <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground hover:text-destructive" onClick={() => onDelete(birthday.id)}>
+          <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground hover:text-destructive" aria-label="Delete" onClick={() => onDelete(birthday.id)}>
             <Trash2 className="w-3.5 h-3.5" />
           </Button>
         </div>

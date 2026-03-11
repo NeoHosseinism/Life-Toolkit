@@ -11,10 +11,10 @@ export default defineConfig({
       registerType: "autoUpdate",
       includeAssets: ["favicon.ico", "apple-touch-icon.png", "icons/*.png"],
       manifest: {
-        name: "Self Monitor",
-        short_name: "SelfMon",
-        description: "Your personal life-tracking & planning companion",
-        theme_color: "#6366f1",
+        name: "Life-Toolkit | جعبه‌ابزار زندگی",
+        short_name: "Life-Toolkit",
+        description: "Your personal life-tracking & planning companion | ابزار مدیریت زندگی",
+        theme_color: "#2563eb",
         background_color: "#0f0f13",
         display: "standalone",
         orientation: "portrait-primary",
@@ -62,10 +62,8 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks(id) {
-          if (id.includes('/sections/Psychology')) return 'psychology';
-          if (id.includes('react-dom') || id.includes('react/')) return 'vendor-react';
+          if (id.includes('react-dom') || id.includes('react/') || id.includes('recharts')) return 'vendor-react';
           if (id.includes('framer-motion')) return 'vendor-motion';
-          if (id.includes('recharts')) return 'vendor-charts';
           if (id.includes('@radix-ui/')) return 'vendor-radix';
         },
       },

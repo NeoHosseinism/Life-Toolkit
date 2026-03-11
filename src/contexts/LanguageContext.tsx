@@ -71,6 +71,12 @@ const translations: Record<Language, Translations> = {
     subtasks: 'Subtasks',
     addSubtask: 'Add Subtask',
     exercise: 'Exercise',
+    running: 'Running',
+    walking: 'Walking',
+    cycling: 'Cycling',
+    swimming: 'Swimming',
+    gym: 'Gym',
+    yoga: 'Yoga',
     sleep: 'Sleep',
     duration: 'Duration',
     calories: 'Calories',
@@ -94,6 +100,12 @@ const translations: Record<Language, Translations> = {
     skills: 'Skills',
     streak: 'Streak',
     longestStreak: 'Longest Streak',
+    completedCheck: 'Completed ✅',
+    streakFrozen: 'Streak frozen ❄️',
+    best: 'Best',
+    daysShort: 'd',
+    toMilestone: 'to',
+    dayMilestone: '-day milestone',
     daily: 'Daily',
     weekly: 'Weekly',
     milestones: 'Milestones',
@@ -244,12 +256,17 @@ const translations: Record<Language, Translations> = {
     add: 'Add',
     title: 'Title',
     more: 'more',
+    captureAnything: 'Capture anything on your mind…',
+    inboxZero: 'Inbox zero! 🎉',
+    someday: 'Someday',
+    nextActions: 'Next Actions',
     // Calendar
     month: 'Month',
     list: 'List',
     addEvent: 'Add Event',
     event: 'Event',
     // Nav
+    life: 'Life',
     favorites: 'Favorites',
     totalTime: 'Total Time',
     // Task views
@@ -275,6 +292,8 @@ const translations: Record<Language, Translations> = {
     aiModel: 'AI Model',
     aiSettings: 'AI Settings',
     apiKeyDescription: 'Used for AI-powered journal analysis. Get your key at openrouter.ai',
+    addApiKeyMessage: 'Add your',
+    inSettingsUnlock: 'in Settings to unlock AI journal analysis.',
     checkBalance: 'Check Balance',
     expenses: 'Expenses',
   },
@@ -337,6 +356,12 @@ const translations: Record<Language, Translations> = {
     subtasks: 'زیروظایف',
     addSubtask: 'افزودن زیروظیفه',
     exercise: 'ورزش',
+    running: 'دویدن',
+    walking: 'پیاده‌روی',
+    cycling: 'دوچرخه‌سواری',
+    swimming: 'شنا',
+    gym: 'باشگاه',
+    yoga: 'یوگا',
     sleep: 'خواب',
     duration: 'مدت',
     calories: 'کالری',
@@ -360,6 +385,12 @@ const translations: Record<Language, Translations> = {
     skills: 'مهارت‌ها',
     streak: 'پیوستگی',
     longestStreak: 'بیشترین پیوستگی',
+    completedCheck: 'انجام شده ✅',
+    streakFrozen: 'استریک منجمد ❄️',
+    best: 'بهترین',
+    daysShort: 'روز',
+    toMilestone: 'تا',
+    dayMilestone: ' روزه',
     daily: 'روزانه',
     weekly: 'هفتگی',
     milestones: 'نقاط عطف',
@@ -510,12 +541,17 @@ const translations: Record<Language, Translations> = {
     add: 'افزودن',
     title: 'عنوان',
     more: 'بیشتر',
+    captureAnything: 'هر چیزی که در ذهنتان است را بنویسید…',
+    inboxZero: 'صندوق خالی! 🎉',
+    someday: 'یک‌روز',
+    nextActions: 'اقدامات بعدی',
     // Calendar
     month: 'ماه',
     list: 'لیست',
     addEvent: 'افزودن رویداد',
     event: 'رویداد',
     // Nav
+    life: 'زندگی',
     favorites: 'موردعلاقه‌ها',
     totalTime: 'زمان کل',
     // Task views
@@ -541,6 +577,8 @@ const translations: Record<Language, Translations> = {
     aiModel: 'مدل هوش مصنوعی',
     aiSettings: 'تنظیمات هوش مصنوعی',
     apiKeyDescription: 'برای تحلیل هوشمند دفتر خاطرات استفاده می‌شود. کلید خود را از openrouter.ai دریافت کنید',
+    addApiKeyMessage: 'کلید API خود را',
+    inSettingsUnlock: 'در تنظیمات اضافه کنید.',
     checkBalance: 'بررسی موجودی',
     expenses: 'هزینه‌ها',
   },
@@ -597,30 +635,30 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
-    localStorage.setItem('language', lang);
+    try { localStorage.setItem('language', lang); } catch {}
     // Auto-sync Persian numerals with language
     if (lang === 'fa') {
       setUsePersianNumeralsState(true);
-      localStorage.setItem('usePersianNumerals', 'true');
+      try { localStorage.setItem('usePersianNumerals', 'true'); } catch {}
     } else {
       setUsePersianNumeralsState(false);
-      localStorage.setItem('usePersianNumerals', 'false');
+      try { localStorage.setItem('usePersianNumerals', 'false'); } catch {}
     }
   };
 
   const setCalendar = (cal: CalendarType) => {
     setCalendarState(cal);
-    localStorage.setItem('calendar', cal);
+    try { localStorage.setItem('calendar', cal); } catch {}
   };
 
   const setCurrency = (cur: CurrencyType) => {
     setCurrencyState(cur);
-    localStorage.setItem('currency', cur);
+    try { localStorage.setItem('currency', cur); } catch {}
   };
 
   const setUsePersianNumerals = (v: boolean) => {
     setUsePersianNumeralsState(v);
-    localStorage.setItem('usePersianNumerals', String(v));
+    try { localStorage.setItem('usePersianNumerals', String(v)); } catch {}
   };
 
   const t = useCallback((key: string): string => {
@@ -639,9 +677,9 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   }, [language]);
 
   const toPersianNum = useCallback((num: number | string): string => {
-    if (!usePersianNumerals && language !== 'fa') return String(num);
+    if (!usePersianNumerals) return String(num);
     return String(num).replace(/\d/g, (d) => persianNumerals[d] || d);
-  }, [language, usePersianNumerals]);
+  }, [usePersianNumerals]);
 
   const formatNumber = useCallback((num: number): string => {
     const formatted = new Intl.NumberFormat(language === 'fa' ? 'fa-IR' : 'en-US').format(num);

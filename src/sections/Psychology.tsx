@@ -143,7 +143,7 @@ function OnboardingWizard({ onComplete }: { onComplete: () => void }) {
         className="max-w-lg w-full space-y-6 text-center px-4"
       >
         <div className="text-7xl">{current.icon}</div>
-        <h2 className="text-2xl font-bold">{language === 'fa' ? current.title.fa : current.title.en}</h2>
+        <h2 className="text-xl sm:text-2xl font-bold">{language === 'fa' ? current.title.fa : current.title.en}</h2>
         <p className="text-muted-foreground leading-relaxed text-base">{language === 'fa' ? current.body.fa : current.body.en}</p>
 
         {/* Step dots */}
@@ -293,7 +293,7 @@ export default function Psychology() {
       {/* Header */}
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <div>
-          <h2 className="text-2xl font-bold flex items-center gap-2">
+          <h2 className="text-xl sm:text-2xl font-bold flex items-center gap-2">
             <Brain className="w-6 h-6 text-primary" />
             {isFa ? 'روانشناسی و رشد فردی' : 'Psychology & Personal Growth'}
           </h2>

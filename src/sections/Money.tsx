@@ -171,7 +171,7 @@ export default function Money() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">{t('balance')}</p>
-                  <p className={`text-2xl font-bold ${balance >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                  <p className={`text-xl sm:text-2xl font-bold ${balance >= 0 ? 'text-green-500' : 'text-red-500'}`}>
                     {formatCurrency(balance)}
                   </p>
                   <p className="text-xs text-muted-foreground">{t('total')}</p>
@@ -194,7 +194,7 @@ export default function Money() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">{t('income')}</p>
-                  <p className="text-2xl font-bold text-green-500">
+                  <p className="text-xl sm:text-2xl font-bold text-green-500">
                     {formatCurrency(monthlyIncome)}
                   </p>
                   <p className="text-xs text-muted-foreground">{t('thisMonth')}</p>
@@ -217,7 +217,7 @@ export default function Money() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">{t('expense')}</p>
-                  <p className="text-2xl font-bold text-red-500">
+                  <p className="text-xl sm:text-2xl font-bold text-red-500">
                     {formatCurrency(monthlyExpenses)}
                   </p>
                   <p className="text-xs text-muted-foreground">{t('thisMonth')}</p>
@@ -384,6 +384,7 @@ export default function Money() {
                       <Button
                         variant="ghost"
                         size="icon"
+                        aria-label="Delete transaction"
                         onClick={() => deleteTransaction(transaction.id)}
                       >
                         <X className="w-4 h-4" />
@@ -409,7 +410,7 @@ export default function Money() {
               <CardTitle className="text-base">{t('category')} {t('breakdown')}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="h-64">
+              <div className="h-48 sm:h-56 lg:h-64">
                 {categoryData.length > 0 ? (
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
@@ -466,7 +467,7 @@ export default function Money() {
               <CardTitle className="text-base">{t('monthly')} {t('overview')}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="h-64">
+              <div className="h-48 sm:h-56 lg:h-64">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={monthlyChartData}>
                     <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />

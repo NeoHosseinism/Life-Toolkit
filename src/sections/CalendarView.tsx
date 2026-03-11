@@ -126,7 +126,7 @@ export default function CalendarView() {
                 setIsAddDialogOpen(true);
               }}
               className={`
-                min-h-[80px] sm:min-h-[100px] p-2 rounded-lg border cursor-pointer transition-all
+                min-h-[60px] sm:min-h-[80px] lg:min-h-[100px] p-1.5 sm:p-2 rounded-lg border cursor-pointer transition-all
                 ${isCurrentMonth ? 'bg-card' : 'bg-muted/50 text-muted-foreground'}
                 ${isToday ? 'border-primary ring-1 ring-primary' : 'border-border'}
                 hover:border-primary/50 hover:shadow-sm

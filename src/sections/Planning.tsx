@@ -52,6 +52,7 @@ const krStatusColors: Record<string, string> = {
 // ─── GTD Inbox ────────────────────────────────────────────────────────────────
 
 function GTDInbox({ items, onChange }: { items: GTDItem[]; onChange: (i: GTDItem[]) => void }) {
+  const { t } = useLanguage();
   const [input, setInput] = useState('');
 
   const capture = () => {
@@ -82,16 +83,16 @@ function GTDInbox({ items, onChange }: { items: GTDItem[]; onChange: (i: GTDItem
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && capture()}
-          placeholder="Capture anything on your mind…"
+          placeholder={t('captureAnything') || 'Capture anything on your mind…'}
           className="flex-1 px-4 py-2.5 rounded-xl border border-border bg-card text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
         />
-        <Button onClick={capture}><Plus className="w-4 h-4 mr-1" />Add</Button>
+        <Button onClick={capture}><Plus className="w-4 h-4 me-1" />{t('add') || 'Add'}</Button>
       </div>
 
       {inbox.length === 0 && (
         <div className="text-center py-12 text-muted-foreground">
           <Inbox className="w-10 h-10 mx-auto mb-3 opacity-30" />
-          <p className="text-sm">Inbox zero! 🎉</p>
+          <p className="text-sm">{t('inboxZero') || 'Inbox zero! 🎉'}</p>
         </div>
       )}
 
@@ -109,10 +110,10 @@ function GTDInbox({ items, onChange }: { items: GTDItem[]; onChange: (i: GTDItem
             </span>
             <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
               <Button size="sm" variant="ghost" className="h-7 px-2 text-green-600 hover:text-green-700" onClick={() => markProcessed(item.id)}>
-                <Zap className="w-3.5 h-3.5 mr-1" />Next
+                <Zap className="w-3.5 h-3.5 me-1" />{t('next') || 'Next'}
               </Button>
               <Button size="sm" variant="ghost" className="h-7 px-2 text-muted-foreground" onClick={() => markSomeday(item.id)}>
-                <Clock className="w-3.5 h-3.5 mr-1" />Someday
+                <Clock className="w-3.5 h-3.5 me-1" />{t('someday') || 'Someday'}
               </Button>
               <Button size="sm" variant="ghost" className="h-7 w-7 p-0 text-red-500 hover:text-red-600" onClick={() => remove(item.id)}>
                 <Trash2 className="w-3.5 h-3.5" />
@@ -125,7 +126,7 @@ function GTDInbox({ items, onChange }: { items: GTDItem[]; onChange: (i: GTDItem
       {/* Next Actions */}
       {items.filter((i) => i.isNextAction).length > 0 && (
         <>
-          <h3 className="text-sm font-semibold text-muted-foreground mt-6 mb-2">Next Actions</h3>
+          <h3 className="text-sm font-semibold text-muted-foreground mt-6 mb-2">{t('nextActions') || 'Next Actions'}</h3>
           {items.filter((i) => i.isNextAction).map((item) => (
             <div key={item.id} className="flex items-center gap-3 p-3 rounded-xl bg-primary/5 border border-primary/20">
               <Check className="w-4 h-4 text-primary shrink-0" />
@@ -486,7 +487,7 @@ export default function Planning() {
     >
       {/* Header */}
       <div>
-        <h2 className="text-2xl font-bold">Planning Hub</h2>
+        <h2 className="text-xl sm:text-2xl font-bold">Planning Hub</h2>
         <p className="text-muted-foreground text-sm mt-1">
           GTD · OKR · Eisenhower Matrix · Weekly Review
         </p>

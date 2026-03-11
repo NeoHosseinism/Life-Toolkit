@@ -218,7 +218,7 @@ export default function NotificationsManager() {
     >
       {/* Header */}
       <div>
-        <h2 className="text-2xl font-bold flex items-center gap-2">
+        <h2 className="text-xl sm:text-2xl font-bold flex items-center gap-2">
           <Bell className="w-6 h-6 text-primary" />Reminders
         </h2>
         <p className="text-sm text-muted-foreground mt-1">

@@ -90,29 +90,29 @@ export default function Goals() {
   return (
     <div className="space-y-6">
       {/* Stats */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4">
         <Card>
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">{t('goals')}</p>
-            <p className="text-2xl font-bold">{toPersianNum(goals.length)}</p>
+            <p className="text-xl sm:text-2xl font-bold">{toPersianNum(goals.length)}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">{t('active')}</p>
-            <p className="text-2xl font-bold text-blue-500">{toPersianNum(activeGoals.length)}</p>
+            <p className="text-xl sm:text-2xl font-bold text-blue-500">{toPersianNum(activeGoals.length)}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">{t('completed')}</p>
-            <p className="text-2xl font-bold text-green-500">{toPersianNum(completedGoals.length)}</p>
+            <p className="text-xl sm:text-2xl font-bold text-green-500">{toPersianNum(completedGoals.length)}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">{t('progress')}</p>
-            <p className="text-2xl font-bold">{toPersianNum(totalProgress)}%</p>
+            <p className="text-xl sm:text-2xl font-bold">{toPersianNum(totalProgress)}%</p>
           </CardContent>
         </Card>
       </div>
@@ -213,7 +213,7 @@ export default function Goals() {
                 <div className="flex items-start gap-4">
                   {/* Progress indicator */}
                   <div className="relative w-12 h-12 sm:w-16 sm:h-16 flex-shrink-0">
-                    <svg className="w-full h-full -rotate-90">
+                    <svg className="w-full h-full -rotate-90" viewBox="0 0 64 64">
                       <circle
                         cx="32"
                         cy="32"

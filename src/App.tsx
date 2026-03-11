@@ -1,4 +1,4 @@
-import React, { useState, useEffect, lazy, Suspense } from 'react';
+import React, { useState, useEffect, useCallback, lazy, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   LayoutDashboard, CheckSquare, Calendar, Heart, Wallet,
@@ -201,7 +201,7 @@ function AppContent() {
   const { getDashboardStats }                 = useApp();
   const stats                                 = getDashboardStats();
 
-  const navigate = (id: ViewType) => { setCurrentView(id); setMobileOpen(false); };
+  const navigate = useCallback((id: ViewType) => { setCurrentView(id); setMobileOpen(false); }, []);
 
   // ── Sidebar inner content ──────────────────────────────────────────────────
   const SidebarContent = ({ compact = false }: { compact?: boolean }) => (
@@ -400,7 +400,7 @@ function AppContent() {
               <Button variant="ghost" size="icon" className="lg:hidden shrink-0" onClick={() => setMobileOpen(true)} aria-label="Open menu">
                 <Menu className="w-5 h-5" />
               </Button>
-              <h1 className="text-lg font-semibold truncate">
+              <h1 className="text-base sm:text-lg font-semibold truncate">
                 {t(currentView) || currentView.replace(/([A-Z])/g, ' $1').trim()}
               </h1>
             </div>
@@ -424,7 +424,7 @@ function AppContent() {
           </header>
 
           {/* Content */}
-          <main className="flex-1 overflow-auto p-4 sm:p-6 lg:p-8 pb-24 lg:pb-8">
+          <main className="flex-1 overflow-auto p-3 sm:p-6 lg:p-8 pb-24 lg:pb-8">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentView}
@@ -468,7 +468,7 @@ export default function App() {
       <LanguageProvider>
         <AppProvider>
           <AppContent />
-          <Toaster position="bottom-right" richColors />
+          <Toaster position="top-center" richColors />
         </AppProvider>
       </LanguageProvider>
     </ThemeProvider>

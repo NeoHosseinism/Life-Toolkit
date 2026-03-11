@@ -118,29 +118,29 @@ export default function Learning() {
   return (
     <div className="space-y-6">
       {/* Stats */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4">
         <Card>
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">{t('courses')}</p>
-            <p className="text-2xl font-bold">{toPersianNum(stats.totalCourses)}</p>
+            <p className="text-xl sm:text-2xl font-bold">{toPersianNum(stats.totalCourses)}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">{t('completed')}</p>
-            <p className="text-2xl font-bold">{toPersianNum(stats.completedCourses)}</p>
+            <p className="text-xl sm:text-2xl font-bold">{toPersianNum(stats.completedCourses)}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">{t('books')}</p>
-            <p className="text-2xl font-bold">{toPersianNum(stats.totalBooks)}</p>
+            <p className="text-xl sm:text-2xl font-bold">{toPersianNum(stats.totalBooks)}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">{t('skills')}</p>
-            <p className="text-2xl font-bold">{toPersianNum(stats.totalSkills)}</p>
+            <p className="text-xl sm:text-2xl font-bold">{toPersianNum(stats.totalSkills)}</p>
           </CardContent>
         </Card>
       </div>
@@ -241,6 +241,7 @@ export default function Learning() {
                       <Button
                         variant="ghost"
                         size="sm"
+                        aria-label="Delete course"
                         onClick={() => deleteCourse(course.id)}
                       >
                         <X className="w-4 h-4" />

@@ -280,7 +280,7 @@ export default function Tasks() {
                 <span className="text-sm text-muted-foreground">({toPersianNum(columnTasks.length)})</span>
               </div>
             </div>
-            <div className="space-y-2 min-h-[200px] bg-muted/30 rounded-lg p-2">
+            <div className="space-y-2 min-h-[150px] sm:min-h-[200px] bg-muted/30 rounded-lg p-2">
               <AnimatePresence>
                 {columnTasks.map(task => <TaskCard key={task.id} task={task} />)}
               </AnimatePresence>
