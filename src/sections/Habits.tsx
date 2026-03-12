@@ -326,14 +326,14 @@ export default function Habits() {
     <TooltipProvider>
       <div className="space-y-6 max-w-3xl mx-auto">
         {/* Stats */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 auto-rows-fr">
           {[
             { label: t('habits'),    value: habits.length,     color: '' },
             { label: t('streak'),    value: maxStreak,         color: 'text-orange-500' },
             { label: t('completed'), value: habits.reduce((s,h) => s + h.completions.length, 0), color: 'text-green-500' },
             { label: t('today'),     value: completedToday,    color: 'text-primary' },
           ].map(({ label, value, color }) => (
-            <Card key={label} className="border-border/50">
+            <Card key={label} className="border-border/50 h-full">
               <CardContent className="p-4">
                 <p className="text-xs text-muted-foreground">{label}</p>
                 <p className={`text-xl sm:text-2xl font-bold ${color}`}>{toPersianNum(value)}</p>

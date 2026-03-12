@@ -156,12 +156,12 @@ export default function Health() {
   return (
     <div className="space-y-6">
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 auto-rows-fr">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <Card className="card-hover">
+          <Card className="card-hover h-full">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -186,7 +186,7 @@ export default function Health() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
         >
-          <Card className="card-hover">
+          <Card className="card-hover h-full">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -209,7 +209,7 @@ export default function Health() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
         >
-          <Card className="card-hover">
+          <Card className="card-hover h-full">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>

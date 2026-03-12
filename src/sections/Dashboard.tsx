@@ -4,6 +4,7 @@ import type { Variants } from 'framer-motion';
 import {
   CheckSquare, Clock, Wallet, Flame, Activity,
   Calendar, ArrowUpRight, ArrowDownRight, Sparkles, Target,
+  TrendingUp, PieChart as PieChartIcon, BarChart3, Timer,
 } from 'lucide-react';
 import { useApp } from '@/contexts/AppContext';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -35,25 +36,23 @@ const StatCard = memo(({ title, value, subtitle, icon: Icon, trend, trendUp, col
   title: string; value: string | number; subtitle?: string; icon: React.ElementType;
   trend?: string; trendUp?: boolean; color: string;
 }) => (
-  <motion.div variants={itemVariants}>
-    <Card className="card-hover overflow-hidden">
-      <CardContent className="p-5">
-        <div className="flex items-start justify-between">
-          <div className="flex-1">
-            <p className="text-sm text-muted-foreground">{title}</p>
-            <h3 className="text-xl sm:text-2xl font-bold mt-1">{value}</h3>
-            {subtitle && <p className="text-xs text-muted-foreground mt-1">{subtitle}</p>}
-            {trend && (
-              <div className={`flex items-center gap-1 mt-2 text-sm ${trendUp ? 'text-green-500' : 'text-red-500'}`}>
-                {trendUp ? <ArrowUpRight className="w-4 h-4" /> : <ArrowDownRight className="w-4 h-4" />}
-                <span>{trend}</span>
-              </div>
-            )}
+  <motion.div variants={itemVariants} className="h-full">
+    <Card className="card-hover overflow-hidden h-full">
+      <CardContent className="p-4 lg:p-5 h-full">
+        <div className="flex items-center gap-2 mb-2">
+          <div className="w-8 h-8 lg:w-10 lg:h-10 rounded-lg flex items-center justify-center shrink-0" style={{ backgroundColor: `${color}20` }}>
+            <Icon className="w-4 h-4 lg:w-5 lg:h-5" style={{ color }} />
           </div>
-          <div className="w-11 h-11 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${color}20` }}>
-            <Icon className="w-5 h-5" style={{ color }} />
-          </div>
+          <p className="text-sm lg:text-base text-muted-foreground truncate">{title}</p>
         </div>
+        <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold truncate">{value}</h3>
+        {subtitle && <p className="text-xs lg:text-sm text-muted-foreground mt-1">{subtitle}</p>}
+        {trend && (
+          <div className={`flex items-center gap-1 mt-1.5 text-sm ${trendUp ? 'text-green-500' : 'text-red-500'}`}>
+            {trendUp ? <ArrowUpRight className="w-4 h-4 shrink-0" /> : <ArrowDownRight className="w-4 h-4 shrink-0" />}
+            <span className="truncate">{trend}</span>
+          </div>
+        )}
       </CardContent>
     </Card>
   </motion.div>
@@ -103,25 +102,25 @@ function ActivityHeatmap({ data }: { data: { date: string; count: number }[] }) 
   }
 
   return (
-    <div className={`overflow-x-auto ${isRTL ? 'direction-rtl' : ''}`} style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
-      <div className="flex gap-0.5 min-w-max">
+    <div className={`overflow-x-auto flex flex-col items-center ${isRTL ? 'direction-rtl' : ''}`} style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
+      <div className="flex gap-1 lg:gap-1.5 min-w-max">
         {weeks.map((week, wi) => (
-          <div key={wi} className="flex flex-col gap-0.5">
+          <div key={wi} className="flex flex-col gap-1 lg:gap-1.5">
             {week.map((cell, di) => (
               <div
                 key={di}
                 title={`${cell.date}: ${toPersianNum(cell.count)}`}
-                className="w-3.5 h-3.5 rounded-sm cursor-default transition-opacity hover:opacity-80"
+                className="w-5 h-5 lg:w-7 lg:h-7 rounded-md cursor-default transition-opacity hover:opacity-80"
                 style={{ backgroundColor: getColor(cell.count) }}
               />
             ))}
           </div>
         ))}
       </div>
-      <div className="flex items-center gap-1 mt-2 text-xs text-muted-foreground">
+      <div className="flex items-center justify-center gap-1 lg:gap-1.5 mt-4 lg:mt-5 text-xs lg:text-sm text-muted-foreground">
         <span>{isRTL ? 'کمتر' : 'Less'}</span>
         {[0, 0.25, 0.5, 0.75, 1].map(v => (
-          <div key={v} className="w-3.5 h-3.5 rounded-sm" style={{ backgroundColor: getColor(v * maxCount) }} />
+          <div key={v} className="w-4 h-4 lg:w-5 lg:h-5 rounded-md" style={{ backgroundColor: getColor(v * maxCount) }} />
         ))}
         <span>{isRTL ? 'بیشتر' : 'More'}</span>
       </div>
@@ -138,20 +137,20 @@ function DailyScoreGauge({ score }: { score: number }) {
 
   return (
     <div className="flex flex-col items-center justify-center">
-      <div className="relative w-48 h-48">
+      <div className="relative w-48 h-48 sm:w-56 sm:h-56 lg:w-80 lg:h-80">
         <ResponsiveContainer width="100%" height="100%">
           <RadialBarChart
             cx="50%" cy="50%"
-            innerRadius="65%" outerRadius="90%"
+            innerRadius="70%" outerRadius="92%"
             startAngle={210} endAngle={-30}
             data={[{ value: 100, fill: 'hsl(var(--muted))' }, ...gaugeData]}
           >
-            <RadialBar dataKey="value" cornerRadius={6} background={false} />
+            <RadialBar dataKey="value" cornerRadius={8} background={false} />
           </RadialBarChart>
         </ResponsiveContainer>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="text-xl sm:text-2xl font-bold">{toPersianNum(clamped)}</span>
-          <span className="text-[10px] text-muted-foreground">{isRTL ? 'امتیاز روز' : 'Daily Score'}</span>
+          <span className="text-4xl sm:text-5xl lg:text-6xl font-bold">{toPersianNum(clamped)}</span>
+          <span className="text-base lg:text-lg text-muted-foreground">{isRTL ? 'امتیاز روز' : 'Daily Score'}</span>
         </div>
       </div>
     </div>
@@ -296,10 +295,10 @@ export default function Dashboard() {
   [habits]);
 
   return (
-    <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-6">
+    <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-6 lg:space-y-8">
 
       {/* ── Stat Cards ── */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 auto-rows-fr">
         <StatCard title={t('tasks')} value={toPersianNum(stats.pendingTasks)} subtitle={`${toPersianNum(taskCompletionRate)}% ${t('completed')}`} icon={CheckSquare} trend={`${toPersianNum(stats.completedTasks)} ${t('done')}`} trendUp color="#2467ec" />
         <StatCard title={t('focus')} value={`${toPersianNum(Math.round(stats.focusTimeToday / 60 * 10) / 10)}h`} subtitle={t('today')} icon={Clock} color="#22c55e" />
         <StatCard title={t('streak')} value={toPersianNum(stats.currentStreak)} subtitle={t('days')} icon={Flame} color="#f59e0b" />
@@ -307,30 +306,33 @@ export default function Dashboard() {
       </div>
 
       {/* ── Today Tasks + Daily Score + Habits ── */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 auto-rows-fr">
         {/* Today's Tasks */}
         <motion.div variants={itemVariants} className="lg:col-span-2">
-          <Card className="h-full min-h-[200px]">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-base font-semibold flex items-center gap-2">
-                <Calendar className="w-4 h-4 text-primary" /> {t('today')}
-              </CardTitle>
-              <span className="text-xs text-muted-foreground">{toPersianNum(todayTasks.length)} {t('tasks')}</span>
+          <Card className="h-full flex flex-col">
+            <CardHeader className="pb-2">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-base lg:text-lg font-semibold flex items-center gap-2">
+                  <Calendar className="w-4 h-4 lg:w-5 lg:h-5 text-primary shrink-0" />
+                  {t('today')}
+                </CardTitle>
+                <span className="text-xs lg:text-sm text-muted-foreground shrink-0">{toPersianNum(todayTasks.length)} {t('tasks')}</span>
+              </div>
             </CardHeader>
-            <CardContent>
+            <CardContent className="flex-1 flex flex-col">
               {todayTasks.length === 0 ? (
-                <div className="text-center py-8 text-muted-foreground">
-                  <CheckSquare className="w-10 h-10 mx-auto mb-3 opacity-30" />
-                  <p className="text-sm">{t('noData')}</p>
+                <div className="flex-1 flex flex-col items-center justify-center text-muted-foreground">
+                  <CheckSquare className="w-10 h-10 lg:w-12 lg:h-12 mb-3 opacity-30" />
+                  <p className="text-sm lg:text-base">{t('noData')}</p>
                 </div>
               ) : (
                 <div className="space-y-2">
                   {todayTasks.slice(0, 5).map((task, index) => (
                     <motion.div key={task.id} initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: index * 0.08 }}
-                      className="flex items-center gap-3 p-2.5 rounded-lg bg-muted/50 hover:bg-muted transition-colors">
-                      <div className={`w-2 h-2 rounded-full shrink-0 ${task.priority === 'high' ? 'bg-red-500' : task.priority === 'medium' ? 'bg-yellow-500' : task.priority === 'low' ? 'bg-green-500' : 'bg-gray-400'}`} />
-                      <span className="flex-1 truncate text-sm">{task.title}</span>
-                      <span className={`text-xs px-2 py-0.5 rounded-full shrink-0 ${task.status === 'done' ? 'bg-green-500/10 text-green-500' : task.status === 'inProgress' ? 'bg-blue-500/10 text-blue-500' : 'bg-gray-500/10 text-gray-500'}`}>
+                      className="flex items-center gap-3 p-2.5 lg:p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors">
+                      <div className={`w-2.5 h-2.5 lg:w-3 lg:h-3 rounded-full shrink-0 ${task.priority === 'high' ? 'bg-red-500' : task.priority === 'medium' ? 'bg-yellow-500' : task.priority === 'low' ? 'bg-green-500' : 'bg-gray-400'}`} />
+                      <span className="flex-1 min-w-0 truncate text-sm lg:text-base">{task.title}</span>
+                      <span className={`text-xs lg:text-sm px-2 py-0.5 rounded-full shrink-0 whitespace-nowrap ${task.status === 'done' ? 'bg-green-500/10 text-green-500' : task.status === 'inProgress' ? 'bg-blue-500/10 text-blue-500' : 'bg-gray-500/10 text-gray-500'}`}>
                         {t(task.status)}
                       </span>
                     </motion.div>
@@ -343,26 +345,26 @@ export default function Dashboard() {
 
         {/* Daily Score Gauge */}
         <motion.div variants={itemVariants}>
-          <Card className="h-full flex flex-col min-h-[200px]">
+          <Card className="h-full flex flex-col">
             <CardHeader className="pb-2">
-              <CardTitle className="text-base font-semibold flex items-center gap-2">
-                <Target className="w-4 h-4 text-primary" /> {isRTL ? 'امتیاز امروز' : 'Daily Score'}
+              <CardTitle className="text-base lg:text-lg font-semibold flex items-center gap-2">
+                <Target className="w-4 h-4 lg:w-5 lg:h-5 text-primary" /> {isRTL ? 'امتیاز امروز' : 'Daily Score'}
               </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 flex flex-col items-center justify-center gap-3">
               <DailyScoreGauge score={dailyScore} />
-              <div className="w-full space-y-1.5 text-xs">
+              <div className="w-full space-y-2 lg:space-y-3 text-xs sm:text-sm lg:text-base">
                 {[
                   { label: isRTL ? 'وظایف' : 'Tasks', pct: todayTasks.length > 0 ? Math.round((tasks.filter(t => t.completedAt?.startsWith(today)).length / todayTasks.length) * 100) : 0, color: '#2467ec' },
                   { label: isRTL ? 'عادت‌ها' : 'Habits', pct: habits.length > 0 ? Math.round((habits.filter(h => h.completions.includes(today)).length / habits.length) * 100) : 0, color: '#f59e0b' },
                   { label: isRTL ? 'تمرکز' : 'Focus', pct: Math.min(100, Math.round((stats.focusTimeToday / 7200) * 100)), color: '#22c55e' },
                 ].map(item => (
                   <div key={item.label} className="flex items-center gap-2">
-                    <span className="w-14 text-muted-foreground">{item.label}</span>
-                    <div className="flex-1 h-1.5 rounded-full bg-muted overflow-hidden">
+                    <span className="w-14 lg:w-16 text-muted-foreground">{item.label}</span>
+                    <div className="flex-1 h-2 lg:h-3 rounded-full bg-muted overflow-hidden">
                       <div className="h-full rounded-full transition-all" style={{ width: `${item.pct}%`, backgroundColor: item.color }} />
                     </div>
-                    <span className="w-8 text-right">{toPersianNum(item.pct)}%</span>
+                    <span className="w-10 text-right">{toPersianNum(item.pct)}%</span>
                   </div>
                 ))}
               </div>
@@ -372,23 +374,23 @@ export default function Dashboard() {
       </div>
 
       {/* ── Life Balance Radar + Habit Streak Bars ── */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 auto-rows-fr">
         {/* Life Balance Radar */}
         <motion.div variants={itemVariants}>
-          <Card>
+          <Card className="h-full">
             <CardHeader className="pb-2">
-              <CardTitle className="text-base font-semibold flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-primary" />
+              <CardTitle className="text-base lg:text-lg font-semibold flex items-center gap-2">
+                <Sparkles className="w-4 h-4 lg:w-5 lg:h-5 text-primary" />
                 {isRTL ? 'تعادل زندگی' : 'Life Balance'}
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="h-56 sm:h-64 lg:h-72">
+              <div className="h-56 sm:h-64 lg:h-80">
                 <ResponsiveContainer width="100%" height="100%">
                   <RadarChart data={lifeBalanceData}>
                     <PolarGrid stroke="hsl(var(--border))" />
-                    <PolarAngleAxis dataKey="subject" tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }} />
-                    <PolarRadiusAxis angle={30} domain={[0, 100]} tick={{ fontSize: 9 }} tickCount={4} tickFormatter={(v) => toPersianNum(v)} />
+                    <PolarAngleAxis dataKey="subject" tick={{ fontSize: 12, fill: 'hsl(var(--muted-foreground))' }} />
+                    <PolarRadiusAxis angle={30} domain={[0, 100]} tick={{ fontSize: 11 }} tickCount={4} tickFormatter={(v) => toPersianNum(v)} />
                     <Radar name="Score" dataKey="A" stroke="hsl(var(--primary))" fill="hsl(var(--primary))" fillOpacity={0.25} strokeWidth={2} />
                     <Tooltip contentStyle={tooltipStyle} formatter={(v: number) => [`${toPersianNum(v)}%`, '']} />
                   </RadarChart>
@@ -400,24 +402,24 @@ export default function Dashboard() {
 
         {/* Habit Streak Horizontal Bars */}
         <motion.div variants={itemVariants}>
-          <Card>
+          <Card className="h-full">
             <CardHeader className="pb-2">
-              <CardTitle className="text-base font-semibold flex items-center gap-2">
-                <Flame className="w-4 h-4 text-orange-500" />
+              <CardTitle className="text-base lg:text-lg font-semibold flex items-center gap-2">
+                <Flame className="w-4 h-4 lg:w-5 lg:h-5 text-orange-500" />
                 {isRTL ? 'ریسمان عادت‌ها' : 'Habit Streaks'}
               </CardTitle>
             </CardHeader>
             <CardContent>
               {habitStreakData.length === 0 ? (
-                <div className="h-44 sm:h-48 lg:h-56 flex items-center justify-center text-muted-foreground text-sm">
+                <div className="h-56 sm:h-64 lg:h-80 flex items-center justify-center text-muted-foreground text-sm lg:text-base">
                   {t('noData')}
                 </div>
               ) : (
-                <div className="h-44 sm:h-48 lg:h-56">
+                <div className="h-56 sm:h-64 lg:h-80">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={habitStreakData} layout="vertical" margin={{ left: isRTL ? 16 : 0, right: isRTL ? 0 : 16 }}>
-                      <XAxis type="number" tick={{ fontSize: 11 }} stroke="hsl(var(--muted-foreground))" tickFormatter={(v) => toPersianNum(v)} />
-                      <YAxis type="category" dataKey="name" width={72} tick={{ fontSize: 11 }} stroke="hsl(var(--muted-foreground))" />
+                      <XAxis type="number" tick={{ fontSize: 12 }} stroke="hsl(var(--muted-foreground))" tickFormatter={(v) => toPersianNum(v)} />
+                      <YAxis type="category" dataKey="name" width={72} tick={{ fontSize: 12 }} stroke="hsl(var(--muted-foreground))" />
                       <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" horizontal={false} />
                       <Tooltip contentStyle={tooltipStyle} formatter={(v: number) => [toPersianNum(v), isRTL ? 'روز' : 'days']} />
                       <Bar dataKey="streak" radius={[0, 4, 4, 0]}>
@@ -435,15 +437,18 @@ export default function Dashboard() {
       </div>
 
       {/* ── 30-Day Habit Trend + Enhanced Donut + Focus Line ── */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 auto-rows-fr">
         {/* 30-day habit area chart */}
         <motion.div variants={itemVariants} className="lg:col-span-2">
-          <Card>
+          <Card className="h-full">
             <CardHeader className="pb-2">
-              <CardTitle className="text-base font-semibold">{isRTL ? 'روند عادت‌ها (۳۰ روز)' : 'Habit Trend (30 days)'}</CardTitle>
+              <CardTitle className="text-base lg:text-lg font-semibold flex items-center gap-2">
+                <TrendingUp className="w-4 h-4 lg:w-5 lg:h-5 text-amber-500" />
+                {isRTL ? 'روند عادت‌ها (۳۰ روز)' : 'Habit Trend (30 days)'}
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="h-36 sm:h-40 lg:h-44">
+              <div className="h-44 sm:h-48 lg:h-64">
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={habitTrendData}>
                     <defs>
@@ -453,8 +458,8 @@ export default function Dashboard() {
                       </linearGradient>
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                    <XAxis dataKey="name" tick={{ fontSize: 10 }} stroke="hsl(var(--muted-foreground))" interval={4} />
-                    <YAxis tick={{ fontSize: 10 }} stroke="hsl(var(--muted-foreground))" tickFormatter={(v) => toPersianNum(v)} />
+                    <XAxis dataKey="name" tick={{ fontSize: 11 }} stroke="hsl(var(--muted-foreground))" interval={4} />
+                    <YAxis tick={{ fontSize: 11 }} stroke="hsl(var(--muted-foreground))" tickFormatter={(v) => toPersianNum(v)} />
                     <Tooltip contentStyle={tooltipStyle} formatter={(v: number) => [toPersianNum(v), isRTL ? 'عادت' : 'habits']} />
                     <Area type="monotone" dataKey="completions" stroke="#f59e0b" strokeWidth={2} fill="url(#habitGrad)" dot={false} />
                   </AreaChart>
@@ -466,12 +471,15 @@ export default function Dashboard() {
 
         {/* Enhanced Expense Donut */}
         <motion.div variants={itemVariants}>
-          <Card>
+          <Card className="h-full">
             <CardHeader className="pb-2">
-              <CardTitle className="text-base font-semibold">{t('money')}</CardTitle>
+              <CardTitle className="text-base lg:text-lg font-semibold flex items-center gap-2">
+                <PieChartIcon className="w-4 h-4 lg:w-5 lg:h-5 text-primary" />
+                {t('money')}
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="h-36 sm:h-40 lg:h-44 relative">
+              <div className="h-44 sm:h-48 lg:h-64 relative">
                 {hasExpenses ? (
                   <>
                     <ResponsiveContainer width="100%" height="100%">
@@ -487,21 +495,21 @@ export default function Dashboard() {
                     {/* Center total */}
                     <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                       <div className="text-center">
-                        <p className="text-xs text-muted-foreground">{isRTL ? 'کل' : 'Total'}</p>
-                        <p className="text-sm font-bold leading-tight">{formatCurrency(totalExpenses)}</p>
+                        <p className="text-xs lg:text-sm text-muted-foreground">{isRTL ? 'کل' : 'Total'}</p>
+                        <p className="text-sm lg:text-base font-bold leading-tight">{formatCurrency(totalExpenses)}</p>
                       </div>
                     </div>
                   </>
                 ) : (
-                  <div className="h-full flex items-center justify-center text-muted-foreground text-sm">{t('noData')}</div>
+                  <div className="h-full flex items-center justify-center text-muted-foreground text-sm lg:text-base">{t('noData')}</div>
                 )}
               </div>
               {/* Legend */}
               {hasExpenses && (
                 <div className="grid grid-cols-2 gap-1 mt-2">
                   {expenseCats.filter(c => c.value > 0).map(c => (
-                    <div key={c.name} className="flex items-center gap-1 text-xs text-muted-foreground">
-                      <div className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: c.color }} />
+                    <div key={c.name} className="flex items-center gap-1 text-xs lg:text-sm text-muted-foreground">
+                      <div className="w-2.5 h-2.5 lg:w-3 lg:h-3 rounded-full shrink-0" style={{ backgroundColor: c.color }} />
                       <span className="truncate">{c.name}</span>
                     </div>
                   ))}
@@ -513,19 +521,22 @@ export default function Dashboard() {
       </div>
 
       {/* ── Task bar + Focus line ── */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 auto-rows-fr">
         <motion.div variants={itemVariants}>
-          <Card>
+          <Card className="h-full">
             <CardHeader className="pb-2">
-              <CardTitle className="text-base font-semibold">{isRTL ? 'وظایف تکمیل شده (۷ روز)' : 'Tasks Completed (7 days)'}</CardTitle>
+              <CardTitle className="text-base lg:text-lg font-semibold flex items-center gap-2">
+                <BarChart3 className="w-4 h-4 lg:w-5 lg:h-5 text-blue-500" />
+                {isRTL ? 'وظایف تکمیل شده (۷ روز)' : 'Tasks Completed (7 days)'}
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="h-36 sm:h-40">
+              <div className="h-44 sm:h-48 lg:h-64">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={taskChartData}>
                     <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                    <XAxis dataKey="name" tick={{ fontSize: 11 }} stroke="hsl(var(--muted-foreground))" />
-                    <YAxis tick={{ fontSize: 11 }} stroke="hsl(var(--muted-foreground))" allowDecimals={false} tickFormatter={(v) => toPersianNum(v)} />
+                    <XAxis dataKey="name" tick={{ fontSize: 12 }} stroke="hsl(var(--muted-foreground))" />
+                    <YAxis tick={{ fontSize: 12 }} stroke="hsl(var(--muted-foreground))" allowDecimals={false} tickFormatter={(v) => toPersianNum(v)} />
                     <Tooltip contentStyle={tooltipStyle} />
                     <Bar dataKey="completed" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
                   </BarChart>
@@ -536,17 +547,20 @@ export default function Dashboard() {
         </motion.div>
 
         <motion.div variants={itemVariants}>
-          <Card>
+          <Card className="h-full">
             <CardHeader className="pb-2">
-              <CardTitle className="text-base font-semibold">{isRTL ? 'زمان تمرکز (ساعت)' : 'Focus Time (hrs)'}</CardTitle>
+              <CardTitle className="text-base lg:text-lg font-semibold flex items-center gap-2">
+                <Timer className="w-4 h-4 lg:w-5 lg:h-5 text-green-500" />
+                {isRTL ? 'زمان تمرکز (ساعت)' : 'Focus Time (hrs)'}
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="h-36 sm:h-40">
+              <div className="h-44 sm:h-48 lg:h-64">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={focusTimeData}>
                     <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                    <XAxis dataKey="name" tick={{ fontSize: 11 }} stroke="hsl(var(--muted-foreground))" />
-                    <YAxis tick={{ fontSize: 11 }} stroke="hsl(var(--muted-foreground))" tickFormatter={(v) => toPersianNum(v)} />
+                    <XAxis dataKey="name" tick={{ fontSize: 12 }} stroke="hsl(var(--muted-foreground))" />
+                    <YAxis tick={{ fontSize: 12 }} stroke="hsl(var(--muted-foreground))" tickFormatter={(v) => toPersianNum(v)} />
                     <Tooltip contentStyle={tooltipStyle} />
                     <Line type="monotone" dataKey="minutes" stroke="#22c55e" strokeWidth={2} dot={{ fill: '#22c55e', strokeWidth: 2, r: 3 }} />
                   </LineChart>
@@ -557,16 +571,17 @@ export default function Dashboard() {
         </motion.div>
       </div>
 
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 auto-rows-fr">
       {/* ── Activity Heatmap ── */}
       <motion.div variants={itemVariants}>
-        <Card>
+        <Card className="h-full">
           <CardHeader className="pb-2">
-            <CardTitle className="text-base font-semibold flex items-center gap-2">
-              <Activity className="w-4 h-4 text-primary" />
+            <CardTitle className="text-base lg:text-lg font-semibold flex items-center gap-2">
+              <Activity className="w-4 h-4 lg:w-5 lg:h-5 text-primary" />
               {isRTL ? 'نقشه فعالیت' : 'Activity Map'}
             </CardTitle>
           </CardHeader>
-          <CardContent className="min-h-[100px]">
+          <CardContent className="flex items-center justify-center">
             <ActivityHeatmap data={heatmapData} />
           </CardContent>
         </Card>
@@ -574,31 +589,34 @@ export default function Dashboard() {
 
       {/* ── Recent Transactions ── */}
       <motion.div variants={itemVariants}>
-        <Card>
+        <Card className="h-full flex flex-col">
           <CardHeader className="pb-2">
-            <CardTitle className="text-base font-semibold">{t('recentActivity')}</CardTitle>
+            <CardTitle className="text-base lg:text-lg font-semibold flex items-center gap-2">
+              <Wallet className="w-4 h-4 lg:w-5 lg:h-5 text-primary" />
+              {t('recentActivity')}
+            </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="flex-1 flex flex-col">
             {recentTransactions.length === 0 ? (
-              <div className="text-center py-8 text-muted-foreground">
-                <Activity className="w-10 h-10 mx-auto mb-3 opacity-30" />
-                <p className="text-sm">{t('noData')}</p>
+              <div className="flex-1 flex flex-col items-center justify-center text-muted-foreground">
+                <Activity className="w-10 h-10 lg:w-12 lg:h-12 mb-3 opacity-30" />
+                <p className="text-sm lg:text-base">{t('noData')}</p>
               </div>
             ) : (
               <div className="space-y-2">
                 {recentTransactions.map((tr, i) => (
                   <motion.div key={tr.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
-                    className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
-                    <div className="flex items-center gap-3">
-                      <div className={`w-9 h-9 rounded-lg flex items-center justify-center ${tr.type === 'income' ? 'bg-green-500/10 text-green-500' : 'bg-red-500/10 text-red-500'}`}>
-                        {tr.type === 'income' ? <ArrowUpRight className="w-4 h-4" /> : <ArrowDownRight className="w-4 h-4" />}
+                    className="flex items-center justify-between p-3 lg:p-4 rounded-lg bg-muted/50">
+                    <div className="flex items-center gap-3 min-w-0 flex-1">
+                      <div className={`w-9 h-9 lg:w-10 lg:h-10 rounded-lg flex items-center justify-center shrink-0 ${tr.type === 'income' ? 'bg-green-500/10 text-green-500' : 'bg-red-500/10 text-red-500'}`}>
+                        {tr.type === 'income' ? <ArrowUpRight className="w-4 h-4 lg:w-5 lg:h-5" /> : <ArrowDownRight className="w-4 h-4 lg:w-5 lg:h-5" />}
                       </div>
-                      <div>
-                        <p className="font-medium text-sm">{tr.description}</p>
-                        <p className="text-xs text-muted-foreground">{t(tr.category)}</p>
+                      <div className="min-w-0">
+                        <p className="font-medium text-sm lg:text-base truncate">{tr.description}</p>
+                        <p className="text-xs lg:text-sm text-muted-foreground">{t(tr.category)}</p>
                       </div>
                     </div>
-                    <span className={`font-semibold text-sm ${tr.type === 'income' ? 'text-green-500' : 'text-red-500'}`}>
+                    <span className={`font-semibold text-sm lg:text-base shrink-0 ${tr.type === 'income' ? 'text-green-500' : 'text-red-500'}`}>
                       {tr.type === 'income' ? '+' : '-'}{formatCurrency(tr.amount)}
                     </span>
                   </motion.div>
@@ -608,6 +626,7 @@ export default function Dashboard() {
           </CardContent>
         </Card>
       </motion.div>
+      </div>
 
     </motion.div>
   );

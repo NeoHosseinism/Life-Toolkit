@@ -128,14 +128,14 @@ export default function Pomodoro() {
   return (
     <div className="space-y-6">
       {/* Stats */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4">
-        <Card>
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 auto-rows-fr">
+        <Card className="h-full">
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">{t('today')}</p>
             <p className="text-xl sm:text-2xl font-bold">{toPersianNum(todaySessions.length)}</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="h-full">
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">{t('focusTime')}</p>
             <p className="text-xl sm:text-2xl font-bold">
@@ -143,13 +143,13 @@ export default function Pomodoro() {
             </p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="h-full">
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">{t('sessions')}</p>
             <p className="text-xl sm:text-2xl font-bold">{toPersianNum(sessionsCompleted)}</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="h-full">
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">{t('streak')}</p>
             <div className="flex items-center gap-1">
@@ -292,9 +292,9 @@ export default function Pomodoro() {
       </div>
 
       {/* Settings & History */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 auto-rows-fr">
         {/* Settings */}
-        <Card>
+        <Card className="h-full">
           <CardHeader>
             <CardTitle className="text-base flex items-center gap-2">
               <Settings className="w-4 h-4" />
@@ -351,7 +351,7 @@ export default function Pomodoro() {
         </Card>
 
         {/* Recent Sessions */}
-        <Card>
+        <Card className="h-full">
           <CardHeader>
             <CardTitle className="text-base flex items-center gap-2">
               <History className="w-4 h-4" />

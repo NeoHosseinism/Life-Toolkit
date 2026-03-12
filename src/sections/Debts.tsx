@@ -265,14 +265,14 @@ export default function Debts() {
   return (
     <div className="space-y-6 max-w-3xl mx-auto">
       {/* Summary cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 auto-rows-fr">
         {[
           { label: isRTL ? 'طلبکارم' : 'Owed to me', value: formatCurrency(totalOwedToMe), color: 'text-blue-500', icon: <HandCoins className="w-4 h-4" /> },
           { label: isRTL ? 'بدهکارم' : 'I owe', value: formatCurrency(totalIOwe), color: 'text-amber-500', icon: <HandCoins className="w-4 h-4 rotate-180" /> },
           { label: isRTL ? 'تأخیری' : 'Overdue', value: String(overdueCount), color: 'text-red-500', icon: <AlertCircle className="w-4 h-4" /> },
           { label: isRTL ? 'تکالیف باقی' : 'Obligations', value: String(unfulfilledObligations), color: 'text-purple-500', icon: <Sparkles className="w-4 h-4" /> },
         ].map(card => (
-          <div key={card.label} className="rounded-xl border border-border/50 bg-card/60 backdrop-blur-sm p-3 space-y-1">
+          <div key={card.label} className="rounded-xl border border-border/50 bg-card/60 backdrop-blur-sm p-3 space-y-1 h-full">
             <div className={`flex items-center gap-1.5 ${card.color}`}>
               {card.icon}
               <span className="text-xs text-muted-foreground">{card.label}</span>

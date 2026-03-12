@@ -118,26 +118,26 @@ export default function Learning() {
   return (
     <div className="space-y-6">
       {/* Stats */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4">
-        <Card>
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 auto-rows-fr">
+        <Card className="h-full">
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">{t('courses')}</p>
             <p className="text-xl sm:text-2xl font-bold">{toPersianNum(stats.totalCourses)}</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="h-full">
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">{t('completed')}</p>
             <p className="text-xl sm:text-2xl font-bold">{toPersianNum(stats.completedCourses)}</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="h-full">
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">{t('books')}</p>
             <p className="text-xl sm:text-2xl font-bold">{toPersianNum(stats.totalBooks)}</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="h-full">
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">{t('skills')}</p>
             <p className="text-xl sm:text-2xl font-bold">{toPersianNum(stats.totalSkills)}</p>
@@ -199,7 +199,7 @@ export default function Learning() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.05 }}
               >
-                <Card className="card-hover">
+                <Card className="card-hover h-full">
                   <CardContent className="p-4">
                     <div className="flex items-start justify-between mb-3">
                       <div>
@@ -301,7 +301,7 @@ export default function Learning() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.05 }}
               >
-                <Card className="card-hover">
+                <Card className="card-hover h-full">
                   <CardContent className="p-4">
                     <div className="flex items-start justify-between mb-3">
                       <div>
@@ -409,7 +409,7 @@ export default function Learning() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.05 }}
               >
-                <Card className="card-hover">
+                <Card className="card-hover h-full">
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between mb-3">
                       <h4 className="font-semibold">{skill.name}</h4>

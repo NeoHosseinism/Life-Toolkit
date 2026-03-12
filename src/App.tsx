@@ -175,7 +175,7 @@ function AppContent() {
   const [collapsed, setCollapsed]     = useState(false);
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
   const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({});
-  const [favorites, setFavorites] = useState<ViewType[]>(['dashboard', 'tasks', 'calendar']);
+  const [favorites, setFavorites] = useState<ViewType[]>([]);
 
   const toggleGroup = (groupLabel: string) => {
     setCollapsedGroups(prev => ({ ...prev, [groupLabel]: !prev[groupLabel] }));

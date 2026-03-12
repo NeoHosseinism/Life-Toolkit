@@ -90,26 +90,26 @@ export default function Goals() {
   return (
     <div className="space-y-6">
       {/* Stats */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4">
-        <Card>
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 auto-rows-fr">
+        <Card className="h-full">
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">{t('goals')}</p>
             <p className="text-xl sm:text-2xl font-bold">{toPersianNum(goals.length)}</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="h-full">
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">{t('active')}</p>
             <p className="text-xl sm:text-2xl font-bold text-blue-500">{toPersianNum(activeGoals.length)}</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="h-full">
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">{t('completed')}</p>
             <p className="text-xl sm:text-2xl font-bold text-green-500">{toPersianNum(completedGoals.length)}</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="h-full">
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">{t('progress')}</p>
             <p className="text-xl sm:text-2xl font-bold">{toPersianNum(totalProgress)}%</p>

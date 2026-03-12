@@ -494,14 +494,14 @@ export default function Planning() {
       </div>
 
       {/* Stats row */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 auto-rows-fr">
         {[
           { label: 'Inbox', value: inboxCount, icon: Inbox, color: 'text-yellow-500' },
           { label: 'Next Actions', value: gtdItems.filter((i) => i.isNextAction).length, icon: Zap, color: 'text-green-500' },
           { label: 'OKR Cycles', value: okrCycles.length, icon: BarChart3, color: 'text-blue-500' },
           { label: 'Reviews', value: reviews.filter((r) => r.completedAt).length, icon: ClipboardList, color: 'text-primary' },
         ].map(({ label, value, icon: Icon, color }) => (
-          <Card key={label} className="border-border/50">
+          <Card key={label} className="border-border/50 h-full">
             <CardContent className="p-4 flex items-center gap-2 sm:gap-3">
               <Icon className={`w-5 h-5 ${color}`} />
               <div>
